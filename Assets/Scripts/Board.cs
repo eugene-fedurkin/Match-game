@@ -130,5 +130,51 @@ public class Board : MonoBehaviour
         }
 
         yield return new WaitForSeconds(.4f);
+        StartCoroutine(FillBoardCo());
+    }
+
+    void RefillBoard()
+    {
+        for (int i = 0; i < _width; i++)
+        {
+            for (int j = 0; j < _height; j++)
+            {
+                if (allDots[i, j] == null)
+                {
+                    Vector2 tempPosition = new Vector2(i, j);
+                    int dotToUse = Random.Range(0, _dots.Length);
+                    GameObject piece = Instantiate(_dots[dotToUse], tempPosition, Quaternion.identity);
+                    allDots[i, j] = piece;
+                }
+            }
+        }
+    }
+
+    bool MatchesOnBoard()
+    {
+        for (int i = 0; i < _width; i++)
+        {
+            for (int j = 0; j < _height; j++)
+            {
+                if (allDots[i, j] != null && allDots[i, j].GetComponent<Dot>().isMatched)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    IEnumerator FillBoardCo()
+    {
+        RefillBoard();
+        yield return new WaitForSeconds(.5f);
+
+        while(MatchesOnBoard())
+        {
+            yield return new WaitForSeconds(.5f);
+            DestroyMatches();
+        }
     }
 }
