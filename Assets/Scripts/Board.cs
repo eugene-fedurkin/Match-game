@@ -105,5 +105,30 @@ public class Board : MonoBehaviour
                 }
             }
         }
+
+        StartCoroutine(DecrieseRowCo());
+    }
+
+    IEnumerator DecrieseRowCo()
+    {
+        int nullCount = 0;
+
+        for (int i = 0; i < _width; i++)
+        {
+            for (int j = 0; j < _height; j++)
+            {
+                if (allDots[i, j] == null)
+                {
+                    nullCount++;
+                } else if (nullCount > 0)
+                {
+                    allDots[i, j].GetComponent<Dot>().row -= nullCount;
+                    allDots[i, j] = null;
+                }
+            }
+            nullCount = 0;
+        }
+
+        yield return new WaitForSeconds(.4f);
     }
 }

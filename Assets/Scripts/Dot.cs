@@ -11,8 +11,8 @@ public class Dot : MonoBehaviour
     int targetY;
     public bool isMatched = false;
 
-    [SerializeField] int col;
-    [SerializeField] int row;
+    public int col;
+    public int row;
     public int prevRow;
     public int prevCol;
     GameObject otherDot;
@@ -50,12 +50,16 @@ public class Dot : MonoBehaviour
             // Move toward
             tempPosition = new Vector2(targetX, transform.position.y);
             transform.position = Vector2.Lerp(transform.position, tempPosition, .04f);
+
+            if(board.allDots[col, row] != this.gameObject)
+            {
+                board.allDots[col, row] = this.gameObject;
+            }
         } else
         {
             // Directly set
             tempPosition = new Vector2(targetX, transform.position.y);
             transform.position = tempPosition;
-            board.allDots[col, row] = this.gameObject;
         }
 
         if (Mathf.Abs(targetY - transform.position.y) > .1)
@@ -63,13 +67,16 @@ public class Dot : MonoBehaviour
             // Move toward
             tempPosition = new Vector2(transform.position.x, targetY);
             transform.position = Vector2.Lerp(transform.position, tempPosition, .04f);
+            if (board.allDots[col, row] != this.gameObject)
+            {
+                board.allDots[col, row] = this.gameObject;
+            }
         }
         else
         {
             // Directly set
             tempPosition = new Vector2(transform.position.x, targetY);
             transform.position = tempPosition;
-            board.allDots[col, row] = this.gameObject;
         }
     }
 
