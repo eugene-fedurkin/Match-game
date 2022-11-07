@@ -171,6 +171,9 @@ public class Dot : MonoBehaviour
                 otherDot.GetComponent<Dot>().col = col;
                 row = prevRow;
                 col = prevCol;
+            } else
+            {
+                board.DestroyMatches();
             }
 
             otherDot = null;

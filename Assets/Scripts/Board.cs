@@ -83,4 +83,27 @@ public class Board : MonoBehaviour
         }
         return false;
     }
+
+    void DestroyMatchesAt(int col, int row)
+    {
+        if (allDots[col, row].GetComponent<Dot>().isMatched)
+        {
+            Destroy(allDots[col, row]);
+            allDots[col, row] = null;
+        }
+    }
+
+    public void DestroyMatches()
+    {
+        for (int i = 0; i < _width; i++)
+        {
+            for (int j = 0; j < _height; j++)
+            {
+                if (allDots[i, j] != null)
+                {
+                    DestroyMatchesAt(i, j);
+                }
+            }
+        }
+    }
 }
