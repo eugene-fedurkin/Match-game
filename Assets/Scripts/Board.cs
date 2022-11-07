@@ -30,10 +30,21 @@ public class Board : MonoBehaviour
             for (int j = 0; j < _height; j++)
             {
                 Vector2 tempPosition = new Vector2(i, j);
-                GameObject tile = Instantiate(_tilePrefab, tempPosition, Quaternion.identity);
-                tile.transform.parent = this.transform;
-                tile.name = "(" + i + ", " + j + ")";
+                GameObject backgroundTile = Instantiate(_tilePrefab, tempPosition, Quaternion.identity);
+                backgroundTile.transform.parent = this.transform;
+                backgroundTile.name = "(" + i + ", " + j + ")";
                 int dotToUse = Random.Range(0, _dots.Length);
+
+                int maxIteration = 0;
+                while (MatchAt(i, j, _dots[dotToUse]) && maxIteration < 100)
+                {
+                    dotToUse = Random.Range(0, _dots.Length);
+                    maxIteration++;
+
+                    Debug.Log(maxIteration);
+                }
+                maxIteration = 0;
+
                 GameObject dot = Instantiate(_dots[dotToUse], tempPosition, Quaternion.identity);
                 dot.transform.parent = this.transform;
                 dot.name = "(" + i + ", " + j + ")";
@@ -41,5 +52,35 @@ public class Board : MonoBehaviour
             }
 
         }
+    }
+
+    bool MatchAt(int col, int row, GameObject piece)
+    {
+        if (col > 1 && row > 1)
+        {
+            if (allDots[col - 1, row].tag == piece.tag && allDots[col - 2, row].tag == piece.tag) {
+                return true;
+            }
+
+            if (allDots[col, row - 1].tag == piece.tag && allDots[col, row - 2].tag == piece.tag)
+            {
+                return true;
+            }
+        } else if (col <= 1 || row <= 1)
+        {
+            if (row > 1)
+            {
+                if (allDots[col, row - 1].tag == piece.tag && allDots[col, row - 2].tag == piece.tag) {
+                    return true;
+                }
+            } else if (col > 1)
+            {
+                if (allDots[col - 1, row].tag == piece.tag && allDots[col - 2, row].tag == piece.tag)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
