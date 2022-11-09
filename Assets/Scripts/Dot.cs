@@ -27,10 +27,10 @@ public class Dot : MonoBehaviour
         board = FindObjectOfType<Board>();
         targetX = (int)transform.position.x;
         targetY = (int)transform.position.y;
-        col = targetX;
+        /*col = targetX;
         row = targetY;
         prevRow = row;
-        prevCol = col;
+        prevCol = col;*/
     }
 
     // Update is called once per frame
@@ -82,13 +82,22 @@ public class Dot : MonoBehaviour
 
     void OnMouseDown()
     {
-        firstTouchPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        if (board.currentState == GameState.move)
+        {
+            firstTouchPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        }
     }
 
     void OnMouseUp()
     {
-        finalTouchPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        CalcAngle();
+        if (board.currentState == GameState.move)
+        {
+            finalTouchPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            CalcAngle();
+        } else
+        {
+            board.currentState = GameState.move;
+        }
     }
 
     void CalcAngle()
@@ -97,22 +106,27 @@ public class Dot : MonoBehaviour
         {
             swipeAngle = Mathf.Atan2(finalTouchPosition.y - firstTouchPosition.y, finalTouchPosition.x - firstTouchPosition.x) * 180 / Mathf.PI;
             MovePieces();
+            board.currentState = GameState.wait;
         }
        
     }
 
     void MovePieces()
     {
-        if (swipeAngle > -45 && swipeAngle <= 45 && col < board._width - 1)
+        if (swipeAngle > -45 && swipeAngle <= 45 && col < board.width - 1)
         {
             // Right swipe
             otherDot = board.allDots[col + 1, row];
+            prevRow = row;
+            prevCol = col;
             otherDot.GetComponent<Dot>().col -= 1;
             col += 1;
-        } else if (swipeAngle > 45 && swipeAngle <= 135 && row < board._height - 1)
+        } else if (swipeAngle > 45 && swipeAngle <= 135 && row < board.height - 1)
         {
             // Up swipe
             otherDot = board.allDots[col, row + 1];
+            prevRow = row;
+            prevCol = col;
             otherDot.GetComponent<Dot>().row -= 1;
             row += 1;
         }
@@ -120,6 +134,8 @@ public class Dot : MonoBehaviour
         {
             // Left swipe
             otherDot = board.allDots[col - 1, row];
+            prevRow = row;
+            prevCol = col;
             otherDot.GetComponent<Dot>().col += 1;
             col -= 1;
         }
@@ -127,6 +143,8 @@ public class Dot : MonoBehaviour
         {
             // Down swipe
             otherDot = board.allDots[col, row - 1];
+            prevRow = row;
+            prevCol = col;
             otherDot.GetComponent<Dot>().row += 1;
             row -= 1;
         }
@@ -136,7 +154,7 @@ public class Dot : MonoBehaviour
 
     void FindMatches()
     {
-        if (col > 0 && col < board._width - 1) {
+        if (col > 0 && col < board.width - 1) {
             GameObject letfDot = board.allDots[col - 1, row];
             GameObject rightDot = board.allDots[col + 1, row];
             if (letfDot != null && rightDot != null)
@@ -144,12 +162,13 @@ public class Dot : MonoBehaviour
                 if (letfDot.tag == this.gameObject.tag && rightDot.tag == this.gameObject.tag) {
                     letfDot.GetComponent<Dot>().isMatched = true;
                     rightDot.GetComponent<Dot>().isMatched = true;
+                    Debug.Log(this.tag);
                     isMatched = true;
                 }
             }
         }
 
-        if (row > 0 && row < board._height - 1)
+        if (row > 0 && row < board.height - 1)
         {
             GameObject upDot = board.allDots[col, row + 1];
             GameObject bottomDot = board.allDots[col, row - 1];
@@ -178,6 +197,8 @@ public class Dot : MonoBehaviour
                 otherDot.GetComponent<Dot>().col = col;
                 row = prevRow;
                 col = prevCol;
+                yield return new WaitForSeconds(.5f);
+                board.currentState = GameState.move;
             } else
             {
                 board.DestroyMatches();

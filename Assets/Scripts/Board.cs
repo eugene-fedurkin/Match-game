@@ -2,6 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum GameState
+{
+    wait,
+    move
+}
+
 public class Board : MonoBehaviour
 {
     [SerializeField] GameObject _tilePrefab;
@@ -10,26 +16,29 @@ public class Board : MonoBehaviour
     BackgroundTile[,] _allTiles;
     public GameObject[,] allDots;
 
-    public int _height;
-    public int _width;
+    public GameState currentState = GameState.move;
+
+    public int offset;
+    public int height;
+    public int width;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        _allTiles = new BackgroundTile[_width, _height];
-        allDots = new GameObject[_width, _height];
+        _allTiles = new BackgroundTile[width, height];
+        allDots = new GameObject[width, height];
         SetUp();
     }
 
     // Update is called once per frame
     void SetUp()
     {
-        for (int i = 0; i < _width; i++)
+        for (int i = 0; i < width; i++)
         {
-            for (int j = 0; j < _height; j++)
+            for (int j = 0; j < height; j++)
             {
-                Vector2 tempPosition = new Vector2(i, j);
+                Vector2 tempPosition = new Vector2(i, j + offset);
                 GameObject backgroundTile = Instantiate(_tilePrefab, tempPosition, Quaternion.identity);
                 backgroundTile.transform.parent = this.transform;
                 backgroundTile.name = "(" + i + ", " + j + ")";
@@ -46,6 +55,8 @@ public class Board : MonoBehaviour
                 maxIteration = 0;
 
                 GameObject dot = Instantiate(_dots[dotToUse], tempPosition, Quaternion.identity);
+                dot.GetComponent<Dot>().row = j;
+                dot.GetComponent<Dot>().col = i;
                 dot.transform.parent = this.transform;
                 dot.name = "(" + i + ", " + j + ")";
                 allDots[i, j] = dot;
@@ -95,9 +106,9 @@ public class Board : MonoBehaviour
 
     public void DestroyMatches()
     {
-        for (int i = 0; i < _width; i++)
+        for (int i = 0; i < width; i++)
         {
-            for (int j = 0; j < _height; j++)
+            for (int j = 0; j < height; j++)
             {
                 if (allDots[i, j] != null)
                 {
@@ -113,9 +124,9 @@ public class Board : MonoBehaviour
     {
         int nullCount = 0;
 
-        for (int i = 0; i < _width; i++)
+        for (int i = 0; i < width; i++)
         {
-            for (int j = 0; j < _height; j++)
+            for (int j = 0; j < height; j++)
             {
                 if (allDots[i, j] == null)
                 {
@@ -135,16 +146,18 @@ public class Board : MonoBehaviour
 
     void RefillBoard()
     {
-        for (int i = 0; i < _width; i++)
+        for (int i = 0; i < width; i++)
         {
-            for (int j = 0; j < _height; j++)
+            for (int j = 0; j < height; j++)
             {
                 if (allDots[i, j] == null)
                 {
-                    Vector2 tempPosition = new Vector2(i, j);
+                    Vector2 tempPosition = new Vector2(i, j + offset);
                     int dotToUse = Random.Range(0, _dots.Length);
                     GameObject piece = Instantiate(_dots[dotToUse], tempPosition, Quaternion.identity);
                     allDots[i, j] = piece;
+                    piece.GetComponent<Dot>().row = j;
+                    piece.GetComponent<Dot>().col = i;
                 }
             }
         }
@@ -152,9 +165,9 @@ public class Board : MonoBehaviour
 
     bool MatchesOnBoard()
     {
-        for (int i = 0; i < _width; i++)
+        for (int i = 0; i < width; i++)
         {
-            for (int j = 0; j < _height; j++)
+            for (int j = 0; j < height; j++)
             {
                 if (allDots[i, j] != null && allDots[i, j].GetComponent<Dot>().isMatched)
                 {
@@ -176,5 +189,8 @@ public class Board : MonoBehaviour
             yield return new WaitForSeconds(.5f);
             DestroyMatches();
         }
+        yield return new WaitForSeconds(.5f);
+        currentState = GameState.move;
+
     }
 }
