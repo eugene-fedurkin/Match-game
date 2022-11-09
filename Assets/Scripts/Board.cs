@@ -12,6 +12,7 @@ public class Board : MonoBehaviour
 {
     [SerializeField] GameObject _tilePrefab;
     [SerializeField] GameObject[] _dots;
+    [SerializeField] MindMatches _findMatches;
 
     BackgroundTile[,] _allTiles;
     public GameObject[,] allDots;
@@ -28,6 +29,7 @@ public class Board : MonoBehaviour
     {
         _allTiles = new BackgroundTile[width, height];
         allDots = new GameObject[width, height];
+        _findMatches = FindObjectOfType<MindMatches>();
         SetUp();
     }
 
@@ -99,6 +101,7 @@ public class Board : MonoBehaviour
     {
         if (allDots[col, row].GetComponent<Dot>().isMatched)
         {
+            _findMatches.currentMatches.Remove(allDots[col, row]);
             Destroy(allDots[col, row]);
             allDots[col, row] = null;
         }

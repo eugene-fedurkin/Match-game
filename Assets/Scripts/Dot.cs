@@ -17,16 +17,19 @@ public class Dot : MonoBehaviour
     public int prevCol;
     GameObject otherDot;
     Board board;
+    MindMatches _findMatches;
 
     Vector2 firstTouchPosition;
     Vector2 finalTouchPosition;
-    Vector2 tempPosition;
+    Vector2 _tempPosition;
+
     // Start is called before the first frame update
     void Start()
     {
         board = FindObjectOfType<Board>();
         targetX = (int)transform.position.x;
         targetY = (int)transform.position.y;
+        _findMatches = FindObjectOfType<MindMatches>();
         /*col = targetX;
         row = targetY;
         prevRow = row;
@@ -36,7 +39,7 @@ public class Dot : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        FindMatches();
+        // FindMatches();
         if (isMatched)
         {
             SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
@@ -48,35 +51,37 @@ public class Dot : MonoBehaviour
         if (Mathf.Abs(targetX - transform.position.x) > .1)
         {
             // Move toward
-            tempPosition = new Vector2(targetX, transform.position.y);
-            transform.position = Vector2.Lerp(transform.position, tempPosition, .04f);
+            _tempPosition = new Vector2(targetX, transform.position.y);
+            transform.position = Vector2.Lerp(transform.position, _tempPosition, .04f);
 
             if(board.allDots[col, row] != this.gameObject)
             {
                 board.allDots[col, row] = this.gameObject;
             }
+            _findMatches.FindAllMatches();
         } else
         {
             // Directly set
-            tempPosition = new Vector2(targetX, transform.position.y);
-            transform.position = tempPosition;
+            _tempPosition = new Vector2(targetX, transform.position.y);
+            transform.position = _tempPosition;
         }
 
         if (Mathf.Abs(targetY - transform.position.y) > .1)
         {
             // Move toward
-            tempPosition = new Vector2(transform.position.x, targetY);
-            transform.position = Vector2.Lerp(transform.position, tempPosition, .04f);
+            _tempPosition = new Vector2(transform.position.x, targetY);
+            transform.position = Vector2.Lerp(transform.position, _tempPosition, .04f);
             if (board.allDots[col, row] != this.gameObject)
             {
                 board.allDots[col, row] = this.gameObject;
             }
+            _findMatches.FindAllMatches();
         }
         else
         {
             // Directly set
-            tempPosition = new Vector2(transform.position.x, targetY);
-            transform.position = tempPosition;
+            _tempPosition = new Vector2(transform.position.x, targetY);
+            transform.position = _tempPosition;
         }
     }
 
