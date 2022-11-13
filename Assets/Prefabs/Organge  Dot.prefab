@@ -114,17 +114,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15985733dce923144b8b5fd385961545, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  swipeAngle: 0
-  swipeResist: 0.5
-  isColorBomb: 0
-  isColumnBomb: 0
-  isRowBomb: 0
-  rowArraw: {fileID: 2676941232508327296, guid: bcb60f6ee41fe5d4290eebca55abf8f0, type: 3}
-  colomnArrow: {fileID: 5471391236912683621, guid: 123ca67ec3e20e94aae618dbc083e779, type: 3}
-  colorBomb: {fileID: 746021277064703870, guid: 377a3a41fa64a81408724ba8d0719a3c, type: 3}
   isMatched: 0
   col: 0
   row: 0
   prevRow: 0
   prevCol: 0
   otherDot: {fileID: 0}
+  swipeAngle: 0
+  swipeResist: 0.5
+  isColorBomb: 0
+  isColumnBomb: 0
+  isRowBomb: 0
+  isAdjacentBomb: 0
+  adjacentBomb: {fileID: 3539593532499732747, guid: 9c01d177edf41bf498cb4da32906f96e, type: 3}
+  rowArraw: {fileID: 2676941232508327296, guid: bcb60f6ee41fe5d4290eebca55abf8f0, type: 3}
+  colomnArrow: {fileID: 5471391236912683621, guid: 123ca67ec3e20e94aae618dbc083e779, type: 3}
+  colorBomb: {fileID: 746021277064703870, guid: 377a3a41fa64a81408724ba8d0719a3c, type: 3}

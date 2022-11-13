@@ -107,7 +107,6 @@ public class Board : MonoBehaviour
                 _findMatches.CheckBombs();
             }
 
-            _findMatches.currentMatches.Remove(allDots[col, row]);
             Destroy(allDots[col, row]);
             allDots[col, row] = null;
         }
@@ -126,6 +125,7 @@ public class Board : MonoBehaviour
             }
         }
 
+        _findMatches.currentMatches.Clear();
         StartCoroutine(DecrieseRowCo());
     }
 
