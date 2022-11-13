@@ -4,16 +4,7 @@ using UnityEngine;
 
 public class Dot : MonoBehaviour
 {
-    [Header("Swipe Stuff")]
-    public float swipeAngle;
-    [SerializeField] float swipeResist = 0.5f;
-
-    [Header("Powerup Stuff")]
-    public bool isColumnBomb;
-    public bool isRowBomb;
-    [SerializeField] GameObject rowArraw;
-    [SerializeField] GameObject colomnArrow;
-
+    [Header("Board Variables")]
     int targetX;
     int targetY;
     public bool isMatched = false;
@@ -29,6 +20,19 @@ public class Dot : MonoBehaviour
     Vector2 firstTouchPosition;
     Vector2 finalTouchPosition;
     Vector2 _tempPosition;
+
+    [Header("Swipe Stuff")]
+    public float swipeAngle;
+    [SerializeField] float swipeResist = 0.5f;
+
+    [Header("Powerup Stuff")]
+    public bool isColorBomb;
+    public bool isColumnBomb;
+    public bool isRowBomb;
+    [SerializeField] GameObject rowArraw;
+    [SerializeField] GameObject colomnArrow;
+    [SerializeField] GameObject colorBomb;
+
 
     // Start is called before the first frame update
     void Start()
@@ -101,6 +105,16 @@ public class Dot : MonoBehaviour
         }
     }
 
+    void OnMouseOver()
+    {
+        if (Input.GetMouseButtonDown(1))
+        {
+            isColorBomb = true;
+            GameObject color = Instantiate(colorBomb, transform.position, Quaternion.identity);
+            color.transform.parent = this.transform;
+        }
+    }
+
 
     void OnMouseUp()
     {
@@ -169,6 +183,16 @@ public class Dot : MonoBehaviour
 
     IEnumerator CheckMoveCo()
     {
+        if (isColorBomb)
+        {
+            _findMatches.MatchPiecesOfColor(otherDot.tag);
+            isMatched = true;
+        } else if (otherDot.GetComponent<Dot>().isColorBomb)
+        {
+            _findMatches.MatchPiecesOfColor(gameObject.tag);
+            otherDot.GetComponent<Dot>().isMatched = true;
+        }
+
         yield return new WaitForSeconds(.5f);
 
         if (otherDot != null)
