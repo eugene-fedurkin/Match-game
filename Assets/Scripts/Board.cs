@@ -22,6 +22,7 @@ public class Board : MonoBehaviour
     public int offset;
     public int height;
     public int width;
+    public Dot currentDot;
 
 
     // Start is called before the first frame update
@@ -101,6 +102,11 @@ public class Board : MonoBehaviour
     {
         if (allDots[col, row].GetComponent<Dot>().isMatched)
         {
+            if (_findMatches.currentMatches.Count == 4 || _findMatches.currentMatches.Count == 7)
+            {
+                _findMatches.CheckBombs();
+            }
+
             _findMatches.currentMatches.Remove(allDots[col, row]);
             Destroy(allDots[col, row]);
             allDots[col, row] = null;
@@ -192,6 +198,8 @@ public class Board : MonoBehaviour
             yield return new WaitForSeconds(.5f);
             DestroyMatches();
         }
+        _findMatches.currentMatches.Clear();
+        currentDot = null;
         yield return new WaitForSeconds(.5f);
         currentState = GameState.move;
 

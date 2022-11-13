@@ -22,7 +22,7 @@ public class Dot : MonoBehaviour
     public int row;
     public int prevRow;
     public int prevCol;
-    GameObject otherDot;
+    public GameObject otherDot;
     Board board;
     MindMatches _findMatches;
 
@@ -48,13 +48,12 @@ public class Dot : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // FindMatches();
-        if (isMatched)
+        /*if (isMatched)
         {
             SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
             spriteRenderer.color = new Color(0f, 0f, 0f, .2f);
         }
-
+        */
         targetX = col;
         targetY = row;
         if (Mathf.Abs(targetX - transform.position.x) > .1)
@@ -102,16 +101,6 @@ public class Dot : MonoBehaviour
         }
     }
 
-    //test
-    void OnMouseOver()
-    {
-        if (Input.GetMouseButtonDown(1))
-        {
-            isColumnBomb = true;
-            GameObject arrow = Instantiate(colomnArrow, transform.position, Quaternion.identity);
-            arrow.transform.parent = this.transform;
-        }
-    }
 
     void OnMouseUp()
     {
@@ -132,6 +121,7 @@ public class Dot : MonoBehaviour
             swipeAngle = Mathf.Atan2(finalTouchPosition.y - firstTouchPosition.y, finalTouchPosition.x - firstTouchPosition.x) * 180 / Mathf.PI;
             MovePieces();
             board.currentState = GameState.wait;
+            board.currentDot = this;
         }
        
     }
@@ -177,39 +167,6 @@ public class Dot : MonoBehaviour
         StartCoroutine(CheckMoveCo());
     }
 
-    void FindMatches()
-    {
-        if (col > 0 && col < board.width - 1) {
-            GameObject letfDot = board.allDots[col - 1, row];
-            GameObject rightDot = board.allDots[col + 1, row];
-            if (letfDot != null && rightDot != null)
-            {
-                if (letfDot.tag == this.gameObject.tag && rightDot.tag == this.gameObject.tag) {
-                    letfDot.GetComponent<Dot>().isMatched = true;
-                    rightDot.GetComponent<Dot>().isMatched = true;
-                    Debug.Log(this.tag);
-                    isMatched = true;
-                }
-            }
-        }
-
-        if (row > 0 && row < board.height - 1)
-        {
-            GameObject upDot = board.allDots[col, row + 1];
-            GameObject bottomDot = board.allDots[col, row - 1];
-
-            if (upDot != null && bottomDot != null)
-            {
-                if (upDot.tag == this.gameObject.tag && bottomDot.tag == this.gameObject.tag)
-                {
-                    upDot.GetComponent<Dot>().isMatched = true;
-                    bottomDot.GetComponent<Dot>().isMatched = true;
-                    isMatched = true;
-                }
-            }
-        }
-    }
-
     IEnumerator CheckMoveCo()
     {
         yield return new WaitForSeconds(.5f);
@@ -223,6 +180,7 @@ public class Dot : MonoBehaviour
                 row = prevRow;
                 col = prevCol;
                 yield return new WaitForSeconds(.5f);
+                board.currentDot = null;
                 board.currentState = GameState.move;
             } else
             {
@@ -231,5 +189,19 @@ public class Dot : MonoBehaviour
 
             otherDot = null;
         }
+    }
+
+    public void makeRowBomb()
+    {
+        isRowBomb = true;
+        GameObject arrow = Instantiate(rowArraw, transform.position, Quaternion.identity);
+        arrow.transform.parent = this.transform;
+    }
+
+    public void makeColumnBomb()
+    {
+        isColumnBomb = true;
+        GameObject arrow = Instantiate(colomnArrow, transform.position, Quaternion.identity);
+        arrow.transform.parent = this.transform;
     }
 }

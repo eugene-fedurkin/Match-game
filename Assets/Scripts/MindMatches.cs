@@ -162,4 +162,43 @@ public class MindMatches : MonoBehaviour
 
         return dots;
     }
+
+    public void CheckBombs()
+    {
+        if (_board.currentDot != null)
+        {
+            if (_board.currentDot.isMatched)
+            {
+                _board.currentDot.isMatched = false;
+                int typeOfBomb = Random.Range(0, 100);
+                if (typeOfBomb < 50)
+                {
+                    _board.currentDot.makeRowBomb();
+                } else if (typeOfBomb >= 50)
+                {
+                    _board.currentDot.makeColumnBomb();
+                }
+
+
+            } else if (_board.currentDot.otherDot != null)
+            {
+                Dot othetDot = _board.currentDot.otherDot.GetComponent<Dot>();
+
+                if (othetDot.isMatched)
+                {
+                    othetDot.isMatched = false;
+
+                    int typeOfBomb = Random.Range(0, 100);
+                    if (typeOfBomb < 50)
+                    {
+                        othetDot.makeRowBomb();
+                    }
+                    else if (typeOfBomb >= 50)
+                    {
+                        othetDot.makeColumnBomb();
+                    }
+                }
+            }
+        }
+    }
 }
