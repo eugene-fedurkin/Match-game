@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class MindMatches : MonoBehaviour
+public class FindMatches : MonoBehaviour
 {
     private Board _board;
     public List<GameObject> currentMatches = new List<GameObject>();
@@ -170,11 +170,21 @@ public class MindMatches : MonoBehaviour
             if (_board.currentDot.isMatched)
             {
                 _board.currentDot.isMatched = false;
+
+                /*
                 int typeOfBomb = Random.Range(0, 100);
                 if (typeOfBomb < 50)
                 {
                     _board.currentDot.makeRowBomb();
                 } else if (typeOfBomb >= 50)
+                {
+                    _board.currentDot.makeColumnBomb();
+                }*/
+                bool isHorizontalSwipe = (_board.currentDot.swipeAngle > -45 && _board.currentDot.swipeAngle <= 45) || (_board.currentDot.swipeAngle < -135 || _board.currentDot.swipeAngle >= 135);
+                if (isHorizontalSwipe)
+                {
+                    _board.currentDot.makeRowBomb();
+                } else
                 {
                     _board.currentDot.makeColumnBomb();
                 }
@@ -188,12 +198,12 @@ public class MindMatches : MonoBehaviour
                 {
                     othetDot.isMatched = false;
 
-                    int typeOfBomb = Random.Range(0, 100);
-                    if (typeOfBomb < 50)
+                    bool isHorizontalSwipe = (_board.currentDot.swipeAngle > -45 && _board.currentDot.swipeAngle <= 45) || (_board.currentDot.swipeAngle < -135 || _board.currentDot.swipeAngle >= 135);
+                    if (isHorizontalSwipe)
                     {
                         othetDot.makeRowBomb();
                     }
-                    else if (typeOfBomb >= 50)
+                    else
                     {
                         othetDot.makeColumnBomb();
                     }

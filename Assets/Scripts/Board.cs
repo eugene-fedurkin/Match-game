@@ -12,7 +12,7 @@ public class Board : MonoBehaviour
 {
     [SerializeField] GameObject _tilePrefab;
     [SerializeField] GameObject[] _dots;
-    [SerializeField] MindMatches _findMatches;
+    [SerializeField] FindMatches _findMatches;
 
     BackgroundTile[,] _allTiles;
     public GameObject[,] allDots;
@@ -30,7 +30,7 @@ public class Board : MonoBehaviour
     {
         _allTiles = new BackgroundTile[width, height];
         allDots = new GameObject[width, height];
-        _findMatches = FindObjectOfType<MindMatches>();
+        _findMatches = FindObjectOfType<FindMatches>();
         SetUp();
     }
 

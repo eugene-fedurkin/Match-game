@@ -5,7 +5,7 @@ using UnityEngine;
 public class Dot : MonoBehaviour
 {
     [Header("Swipe Stuff")]
-    [SerializeField] float swipeAngle;
+    public float swipeAngle;
     [SerializeField] float swipeResist = 0.5f;
 
     [Header("Powerup Stuff")]
@@ -24,7 +24,7 @@ public class Dot : MonoBehaviour
     public int prevCol;
     public GameObject otherDot;
     Board board;
-    MindMatches _findMatches;
+    FindMatches _findMatches;
 
     Vector2 firstTouchPosition;
     Vector2 finalTouchPosition;
@@ -38,7 +38,7 @@ public class Dot : MonoBehaviour
         board = FindObjectOfType<Board>();
         targetX = (int)transform.position.x;
         targetY = (int)transform.position.y;
-        _findMatches = FindObjectOfType<MindMatches>();
+        _findMatches = FindObjectOfType<FindMatches>();
         /*col = targetX;
         row = targetY;
         prevRow = row;
