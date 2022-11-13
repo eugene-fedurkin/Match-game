@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &4979046007880727831
+--- !u!1 &3547676863084551103
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,39 +8,37 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 2976054760471378923}
-  - component: {fileID: 7163819023890972685}
-  - component: {fileID: 5307657016604533180}
-  - component: {fileID: 4442093840701111030}
+  - component: {fileID: 8399133898780179958}
+  - component: {fileID: 2838477329285230695}
   m_Layer: 0
-  m_Name: Green Dot
-  m_TagString: Green Dot
+  m_Name: Colomn Arrow
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &2976054760471378923
+--- !u!4 &8399133898780179958
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4979046007880727831}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.479, y: -3.492, z: 0}
+  m_GameObject: {fileID: 3547676863084551103}
+  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &7163819023890972685
+  m_Father: {fileID: 7215430411863111165}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
+--- !u!212 &2838477329285230695
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4979046007880727831}
+  m_GameObject: {fileID: 3547676863084551103}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -74,54 +72,47 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: bacdb6169f9786d42ae2341ab387e7f0, type: 3}
-  m_Color: {r: 0.09019608, g: 0.5411765, b: 0.5803922, a: 1}
+  m_SortingOrder: 1
+  m_Sprite: {fileID: 21300000, guid: 2595fa6c0f2256f4dac7f0af74cedf3f, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 5.12, y: 5.12}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!58 &5307657016604533180
-CircleCollider2D:
+--- !u!1 &5471391236912683621
+GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4979046007880727831}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.33333334
---- !u!114 &4442093840701111030
-MonoBehaviour:
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7215430411863111165}
+  m_Layer: 0
+  m_Name: Colomn Arrow Holder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7215430411863111165
+Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4979046007880727831}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 15985733dce923144b8b5fd385961545, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  swipeAngle: 0
-  swipeResist: 0.5
-  isColumnBomb: 0
-  isRowBomb: 0
-  rowArraw: {fileID: 2676941232508327296, guid: bcb60f6ee41fe5d4290eebca55abf8f0, type: 3}
-  colomnArrow: {fileID: 5471391236912683621, guid: 123ca67ec3e20e94aae618dbc083e779, type: 3}
-  isMatched: 0
-  col: 0
-  row: 0
-  prevRow: 0
-  prevCol: 0
+  m_GameObject: {fileID: 5471391236912683621}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -7.370489, y: 6.4436755, z: -0.010020766}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 8399133898780179958}
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

@@ -4,8 +4,15 @@ using UnityEngine;
 
 public class Dot : MonoBehaviour
 {
+    [Header("Swipe Stuff")]
     [SerializeField] float swipeAngle;
     [SerializeField] float swipeResist = 0.5f;
+
+    [Header("Powerup Stuff")]
+    public bool isColumnBomb;
+    public bool isRowBomb;
+    [SerializeField] GameObject rowArraw;
+    [SerializeField] GameObject colomnArrow;
 
     int targetX;
     int targetY;
@@ -26,6 +33,8 @@ public class Dot : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        isColumnBomb = false;
+        isRowBomb = false;
         board = FindObjectOfType<Board>();
         targetX = (int)transform.position.x;
         targetY = (int)transform.position.y;
@@ -90,6 +99,17 @@ public class Dot : MonoBehaviour
         if (board.currentState == GameState.move)
         {
             firstTouchPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        }
+    }
+
+    //test
+    void OnMouseOver()
+    {
+        if (Input.GetMouseButtonDown(1))
+        {
+            isColumnBomb = true;
+            GameObject arrow = Instantiate(colomnArrow, transform.position, Quaternion.identity);
+            arrow.transform.parent = this.transform;
         }
     }
 

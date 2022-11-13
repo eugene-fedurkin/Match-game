@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class MindMatches : MonoBehaviour
@@ -36,6 +37,27 @@ public class MindMatches : MonoBehaviour
 
                             if (leftDot.tag == currentDot.tag && rightDot.tag == currentDot.tag)
                             {
+                                if (currentDot.GetComponent<Dot>().isRowBomb || leftDot.GetComponent<Dot>().isRowBomb || rightDot.GetComponent<Dot>().isRowBomb)
+                                {
+                                    currentMatches.Union(GetRowPieces(j));
+                                }
+
+                                if (currentDot.GetComponent<Dot>().isColumnBomb)
+                                {
+                                    currentMatches.Union(GetColumnPieces(i));
+                                }
+
+                                if (leftDot.GetComponent<Dot>().isColumnBomb)
+                                {
+                                    currentMatches.Union(GetColumnPieces(i - 1));
+                                }
+
+                                if (rightDot.GetComponent<Dot>().isColumnBomb)
+                                {
+                                    currentMatches.Union(GetColumnPieces(i + 1));
+                                }
+
+
                                 if (!currentMatches.Contains(leftDot))
                                 {
                                     currentMatches.Add(leftDot);
@@ -64,6 +86,28 @@ public class MindMatches : MonoBehaviour
 
                             if (upDot.tag == currentDot.tag && downDot.tag == currentDot.tag)
                             {
+                                if (currentDot.GetComponent<Dot>().isColumnBomb || downDot.GetComponent<Dot>().isColumnBomb || upDot.GetComponent<Dot>().isColumnBomb)
+                                {
+                                    currentMatches.Union(GetColumnPieces(i));
+                                }
+
+                                if (currentDot.GetComponent<Dot>().isRowBomb)
+                                {
+                                    currentMatches.Union(GetRowPieces(j));
+                                }
+
+                                if (downDot.GetComponent<Dot>().isRowBomb)
+                                {
+                                    currentMatches.Union(GetColumnPieces(j - 1));
+                                }
+
+                                if (upDot.GetComponent<Dot>().isRowBomb)
+                                {
+                                    currentMatches.Union(GetColumnPieces(j + 1));
+                                }
+
+
+
                                 if (!currentMatches.Contains(upDot))
                                 {
                                     currentMatches.Add(upDot);
@@ -86,5 +130,36 @@ public class MindMatches : MonoBehaviour
             }
         }
 
+    }
+
+    List<GameObject> GetColumnPieces(int column)
+    {
+        List<GameObject> dots = new List<GameObject>();
+        for (int i = 0; i < _board.height; i++)
+        {
+            if (_board.allDots[column, i] != null)
+            {
+                dots.Add(_board.allDots[column, i]);
+                _board.allDots[column, i].GetComponent<Dot>().isMatched = true;
+            }
+                
+        }
+
+        return dots;
+    }
+
+    List<GameObject> GetRowPieces(int row)
+    {
+        List<GameObject> dots = new List<GameObject>();
+        for (int i = 0; i < _board.width; i++)
+        {
+            if (_board.allDots[i, row] != null)
+            {
+                dots.Add(_board.allDots[i, row]);
+                _board.allDots[i, row].GetComponent<Dot>().isMatched = true;
+            }
+        }
+
+        return dots;
     }
 }
