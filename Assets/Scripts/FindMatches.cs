@@ -18,6 +18,27 @@ public class FindMatches : MonoBehaviour
         StartCoroutine(FindAllMatchesCo());
     }
 
+    private List<GameObject> isAdjacentBomb(Dot dot1, Dot dot2, Dot dot3) {
+        List<GameObject> currentDots = new List<GameObject>();
+        if (dot1.isAdjacentBomb)
+        {
+            currentMatches.Union(GetAdjacentPieces(dot1.col, dot1.row));
+        }
+
+        if (dot2.isAdjacentBomb)
+        {
+            currentMatches.Union(GetAdjacentPieces(dot2.col, dot2.row));
+        }
+
+        if (dot3.isAdjacentBomb)
+        {
+            currentMatches.Union(GetAdjacentPieces(dot3.col, dot3.row));
+        }
+
+        return currentDots;
+    }
+
+
     private List<GameObject> isRowBomb(Dot dot1, Dot dot2, Dot dot3) {
         List<GameObject> currentDots = new List<GameObject>();
         if (dot1.isRowBomb)
@@ -97,6 +118,8 @@ private void AddToListAndMatch(GameObject dot) {
                             {
                                 currentMatches.Union(isRowBomb(leftDotDot, currentDotDot, rightDotDot));
                                 currentMatches.Union(isColBomb(leftDotDot, currentDotDot, rightDotDot));
+                                currentMatches.Union(isAdjacentBomb(leftDotDot, currentDotDot, rightDotDot));
+                                
                                 GetNearbyPieces(leftDot, currentDot, rightDot);
                             }
                         }
@@ -115,8 +138,8 @@ private void AddToListAndMatch(GameObject dot) {
                             if (upDot.tag == currentDot.tag && downDot.tag == currentDot.tag)
                             {
                                 currentMatches.Union(isColBomb(upDotDot, currentDotDot, downDotDot));
-
                                 currentMatches.Union(isRowBomb(upDotDot, currentDotDot, downDotDot));
+                                currentMatches.Union(isAdjacentBomb(upDotDot, currentDotDot, downDotDot));
                                 GetNearbyPieces(upDot, currentDot, downDot);
                             }
                         }
@@ -143,6 +166,21 @@ private void AddToListAndMatch(GameObject dot) {
             }
         }
     }
+
+     List<GameObject> GetAdjacentPieces(int column, int row) {
+        List<GameObject> dots = new List<GameObject>();
+
+        for (int i = column - 1; i <= column + 1; i++) {
+            for (int j = row - 1; j <= row + 1; j++) {
+                if (i >= 0 && i < _board.width && j >= 0 && j <_board.height) {
+                    dots.Add(_board.allDots[i, j]);
+                    _board.allDots[i, j].GetComponent<Dot>().isMatched = true;
+                }
+            }
+        }
+
+        return dots;
+     }
 
     List<GameObject> GetColumnPieces(int column)
     {

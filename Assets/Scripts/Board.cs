@@ -98,13 +98,83 @@ public class Board : MonoBehaviour
         return false;
     }
 
+    private bool ColumnOrRow() {
+        int numberHorizontal = 0;
+        int numberVertical = 0;
+        Dot firstPiece = _findMatches.currentMatches[0].GetComponent<Dot>();
+
+        if (firstPiece != null) {
+            foreach (GameObject currentPiece in _findMatches.currentMatches) {
+                Dot dot = currentDot.GetComponent<Dot>();
+                if (dot.row == firstPiece.row) {
+                    numberHorizontal++;
+                }
+                if (dot.col == firstPiece.col) {
+                    numberVertical++;
+                }
+            }
+        }
+
+        return numberVertical == 5 || numberHorizontal == 5;
+    }
+
+    private void CheckToMakeBombs() {
+        if (_findMatches.currentMatches.Count == 4 || _findMatches.currentMatches.Count == 7) {
+            _findMatches.CheckBombs();
+        }
+
+        if (_findMatches.currentMatches.Count == 5 || _findMatches.currentMatches.Count == 8) {
+            if (ColumnOrRow()) {
+                // make color bomb
+                if (currentDot != null) {
+                    if (currentDot.isMatched) {
+                        if (!currentDot.isColorBomb) {
+                            currentDot.isMatched = false;
+                            currentDot.makeColorBomb();
+                        }
+                    } else {
+                        if (currentDot.otherDot != null) {
+                            Dot otherDot = currentDot.otherDot.GetComponent<Dot>();
+                            if (otherDot.isMatched) {
+                                if (!otherDot.isColorBomb) {
+                                    otherDot.isMatched = false;
+                                    otherDot.makeColorBomb();
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                // make adjacent bomb
+                if (currentDot != null) {
+                    if (currentDot.isMatched) {
+                        if (!currentDot.isAdjacentBomb) {
+                            currentDot.isMatched = false;
+                            currentDot.makeAdjacentBomb();
+                        }
+                    } else {
+                        if (currentDot.otherDot != null) {
+                            Dot otherDot = currentDot.otherDot.GetComponent<Dot>();
+                            if (otherDot.isMatched) {
+                                if (!otherDot.isAdjacentBomb) {
+                                    otherDot.isMatched = false;
+                                    otherDot.makeAdjacentBomb();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     void DestroyMatchesAt(int col, int row)
     {
         if (allDots[col, row].GetComponent<Dot>().isMatched)
         {
-            if (_findMatches.currentMatches.Count == 4 || _findMatches.currentMatches.Count == 7)
+            if (_findMatches.currentMatches.Count >= 4)
             {
-                _findMatches.CheckBombs();
+                CheckToMakeBombs();
             }
 
             Destroy(allDots[col, row]);

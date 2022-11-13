@@ -29,8 +29,10 @@ public class Dot : MonoBehaviour
     public bool isColorBomb;
     public bool isColumnBomb;
     public bool isRowBomb;
-    [SerializeField] GameObject rowArraw;
-    [SerializeField] GameObject colomnArrow;
+    public bool isAdjacentBomb;
+    [SerializeField] GameObject adjacentBomb;
+    [SerializeField] GameObject rowArrow;
+    [SerializeField] GameObject columnArrow;
     [SerializeField] GameObject colorBomb;
 
 
@@ -39,6 +41,8 @@ public class Dot : MonoBehaviour
     {
         isColumnBomb = false;
         isRowBomb = false;
+        isColorBomb = false;
+        isAdjacentBomb = false;
         board = FindObjectOfType<Board>();
         targetX = (int)transform.position.x;
         targetY = (int)transform.position.y;
@@ -109,9 +113,9 @@ public class Dot : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(1))
         {
-            isColorBomb = true;
-            GameObject color = Instantiate(colorBomb, transform.position, Quaternion.identity);
-            color.transform.parent = this.transform;
+            isAdjacentBomb = true;
+            GameObject marker = Instantiate(adjacentBomb, transform.position, Quaternion.identity);
+            marker.transform.parent = this.transform;
         }
     }
 
@@ -218,14 +222,28 @@ public class Dot : MonoBehaviour
     public void makeRowBomb()
     {
         isRowBomb = true;
-        GameObject arrow = Instantiate(rowArraw, transform.position, Quaternion.identity);
+        GameObject arrow = Instantiate(rowArrow, transform.position, Quaternion.identity);
         arrow.transform.parent = this.transform;
     }
 
     public void makeColumnBomb()
     {
         isColumnBomb = true;
-        GameObject arrow = Instantiate(colomnArrow, transform.position, Quaternion.identity);
+        GameObject arrow = Instantiate(columnArrow, transform.position, Quaternion.identity);
         arrow.transform.parent = this.transform;
+    }
+
+    public void makeColorBomb()
+    {
+        isColorBomb = true;
+        GameObject color = Instantiate(colorBomb, transform.position, Quaternion.identity);
+        color.transform.parent = this.transform;
+    }
+
+    public void makeAdjacentBomb()
+    {
+        isAdjacentBomb = true;
+        GameObject marker = Instantiate(adjacentBomb, transform.position, Quaternion.identity);
+        marker.transform.parent = this.transform;
     }
 }
