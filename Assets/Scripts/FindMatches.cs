@@ -61,17 +61,17 @@ public class FindMatches : MonoBehaviour
 
     private List<GameObject> isColBomb(Dot dot1, Dot dot2, Dot dot3) {
         List<GameObject> currentDots = new List<GameObject>();
-        if (dot1.isColorBomb)
+        if (dot1.isColumnBomb)
         {
             currentMatches.Union(GetColumnPieces(dot1.col));
         }
 
-        if (dot2.isColorBomb)
+        if (dot2.isColumnBomb)
         {
             currentMatches.Union(GetColumnPieces(dot2.col));
         }
 
-        if (dot3.isColorBomb)
+        if (dot3.isColumnBomb)
         {
             currentMatches.Union(GetColumnPieces(dot3.col));
         }
