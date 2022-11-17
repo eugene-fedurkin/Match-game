@@ -30,6 +30,8 @@ public class Board : MonoBehaviour
     private bool[,] blankSpaces;
     public GameObject[,] allDots;
     public TileType[] boardLayout;
+    public BackgroundTile[,] breakableTiles;
+    public GameObject breakableTilePrefab;
 
     public GameState currentState = GameState.move;
 
@@ -42,6 +44,7 @@ public class Board : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        breakableTiles = new BackgroundTile[width, height];
         blankSpaces = new bool[width, height];
         allDots = new GameObject[width, height];
         _findMatches = FindObjectOfType<FindMatches>();
@@ -56,9 +59,20 @@ public class Board : MonoBehaviour
         }
     }
 
+    public void GenerateBreakbaleTiles() {
+         for (int i = 0; i < boardLayout.Length; i++) {
+            if (boardLayout[i].tileKind == TileKind.Breakable) {
+                Vector2 tempPosition = new Vector2(boardLayout[i].x, boardLayout[i].y);
+                GameObject tile = Instantiate(breakableTilePrefab, tempPosition, Quaternion.identity);
+                breakableTiles[boardLayout[i].x, boardLayout[i].y] = tile.GetComponent<BackgroundTile>();
+            }
+         }
+    }
+
     // Update is called once per frame
     void SetUp() {
         GenerateSpaces();
+        GenerateBreakbaleTiles();
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 if (!blankSpaces[i, j]) {
@@ -197,6 +211,13 @@ public class Board : MonoBehaviour
                 CheckToMakeBombs();
             }
 
+            if (breakableTiles[col, row] != null) {
+                breakableTiles[col, row].TakeDamage(1);
+                if (breakableTiles[col, row].hitPoints <= 0) {
+                    breakableTiles[col, row] = null;
+                }
+            }
+
             Destroy(allDots[col, row]);
             allDots[col, row] = null;
         }
@@ -237,30 +258,6 @@ public class Board : MonoBehaviour
         yield return new WaitForSeconds(.4f);
         StartCoroutine(FillBoardCo());
     }
-
-
-    // IEnumerator DecreaseRowCo() {
-    //     int nullCount = 0;
-
-    //     for (int i = 0; i < width; i++)
-    //     {
-    //         for (int j = 0; j < height; j++)
-    //         {
-    //             if (allDots[i, j] == null)
-    //             {
-    //                 nullCount++;
-    //             } else if (nullCount > 0)
-    //             {
-    //                 allDots[i, j].GetComponent<Dot>().row -= nullCount;
-    //                 allDots[i, j] = null;
-    //             }
-    //         }
-    //         nullCount = 0;
-    //     }
-
-    //     yield return new WaitForSeconds(.4f);
-    //     StartCoroutine(FillBoardCo());
-    // }
 
     void RefillBoard()
     {
