@@ -52,8 +52,6 @@ public class Board : MonoBehaviour
                 {
                     dotToUse = Random.Range(0, _dots.Length);
                     maxIteration++;
-
-                    Debug.Log(maxIteration);
                 }
                 maxIteration = 0;
 
