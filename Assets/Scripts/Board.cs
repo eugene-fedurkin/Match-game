@@ -51,9 +51,12 @@ public class Board : MonoBehaviour
         SetUp();
     }
 
-    public void GenerateSpaces() {
+    public void GenerateBlankSpaces() {
         for (int i = 0; i < boardLayout.Length; i++) {
             if (boardLayout[i].tileKind == TileKind.Blank) {
+                Debug.Log("x " + boardLayout[i].x);
+                Debug.Log("y" + boardLayout[i].y);
+                Debug.Log("boardLayout.Length" + boardLayout.Length);
                 blankSpaces[boardLayout[i].x, boardLayout[i].y] = true;
             }
         }
@@ -71,7 +74,7 @@ public class Board : MonoBehaviour
 
     // Update is called once per frame
     void SetUp() {
-        GenerateSpaces();
+        GenerateBlankSpaces();
         GenerateBreakbaleTiles();
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
@@ -280,12 +283,9 @@ public class Board : MonoBehaviour
 
     bool MatchesOnBoard()
     {
-        for (int i = 0; i < width; i++)
-        {
-            for (int j = 0; j < height; j++)
-            {
-                if (allDots[i, j] != null && allDots[i, j].GetComponent<Dot>().isMatched)
-                {
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                if (allDots[i, j] != null && allDots[i, j].GetComponent<Dot>().isMatched) {
                     return true;
                 }
             }
@@ -307,7 +307,73 @@ public class Board : MonoBehaviour
         _findMatches.currentMatches.Clear();
         currentDot = null;
         yield return new WaitForSeconds(.5f);
+
+        if (isDeadlocked()) {
+            Debug.Log("isDeadlocked");
+        }
         currentState = GameState.move;
 
+    }
+
+    private void SwitchPieces(int column, int row, Vector2 direction) {
+        GameObject holder = allDots[column + (int)direction.x, row + (int)direction.y];
+        allDots[column + (int)direction.x, row + (int)direction.y] = allDots[column, row];
+        allDots[column, row] = holder;
+    }
+
+    private bool CheckForMatches() {
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < width; j++) {
+                if (allDots[i, j] != null) {
+
+
+                    if (i < width - 2 && allDots[i + 1, j] != null && allDots[i + 2, j] != null) {
+                        if (allDots[i + 1, j].tag == allDots[i, j].tag && allDots[i + 2, j].tag == allDots[i, j].tag) {
+                            return true;
+                        }
+                    }
+
+                    if (j < height - 2 && allDots[i, j + 1] != null && allDots[i, j + 1] != null) {
+                        if (allDots[i, j + 1].tag == allDots[i, j].tag && allDots[i, j + 2].tag == allDots[i, j].tag) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private bool SwitchAndCheck(int column, int row, Vector2 direction) {
+        SwitchPieces(column, row, direction);
+        if (CheckForMatches()) {
+            SwitchPieces(column, row, direction);
+            return true;
+        }
+        SwitchPieces(column, row, direction);
+        return false;
+    }
+
+    private bool isDeadlocked() {
+        for(int i = 0; i < width; i++) {
+            for(int j = 0; j < width; j++) {
+                if (allDots[i, j] != null) {
+                    if (i < width - 1) {
+                        if (SwitchAndCheck(i, j , Vector2.right)) {
+                            return false;
+                        }
+                    }
+
+                    if (j < height - 1) {
+                        if (SwitchAndCheck(i, j, Vector2.up)) {
+                            return false;
+                        }
+                    }
+
+                }
+            }
+        }
+        return true;
     }
 }
