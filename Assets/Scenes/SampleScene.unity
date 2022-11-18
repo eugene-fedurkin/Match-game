@@ -220,7 +220,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5dadcfbb928ab3047bd28752976117c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraOffsett: -10
+  cameraOffset: -10
 --- !u!1 &963363689
 GameObject:
   m_ObjectHideFlags: 0
@@ -252,16 +252,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _tilePrefab: {fileID: 8753658857414723085, guid: 13ed29a0a6953604da028467e1a79315, type: 3}
   _dots:
-  - {fileID: 4979046007880727831, guid: 72cbe6072cef8914d8d2df4378263c7e, type: 3}
-  - {fileID: 2112311216075032602, guid: a467c9f74d6be4e4a83dd5717c8a0348, type: 3}
-  - {fileID: 6245028554376412811, guid: 6015d966bc8883540ae02d2396a40cf6, type: 3}
-  - {fileID: 3176547136491495813, guid: 9593ecdbf27531b429997221c8ac2348, type: 3}
+  - {fileID: 1476297855905539468, guid: 0d7a1fccf8c02374bb646dc9d0e47c00, type: 3}
+  - {fileID: 8936988163472410663, guid: 529ce1258e669fc4990dbe4fc67f3a91, type: 3}
+  - {fileID: 1328541387185068188, guid: 70e9a936f7b373f4cab4c53497352431, type: 3}
   - {fileID: 3105568233428307544, guid: 69ee0fbfc114909449b5fc86461e26ed, type: 3}
+  - {fileID: 3176547136491495813, guid: 9593ecdbf27531b429997221c8ac2348, type: 3}
+  - {fileID: 6245028554376412811, guid: 6015d966bc8883540ae02d2396a40cf6, type: 3}
+  - {fileID: 2112311216075032602, guid: a467c9f74d6be4e4a83dd5717c8a0348, type: 3}
+  - {fileID: 4979046007880727831, guid: 72cbe6072cef8914d8d2df4378263c7e, type: 3}
   _findMatches: {fileID: 0}
+  boardLayout: []
+  breakableTilePrefab: {fileID: 6687387054438216603, guid: 090e6b22066512a4b8366cfd985104d6, type: 3}
   currentState: 1
   offset: 10
-  height: 10
-  width: 17
+  height: 5
+  width: 5
   currentDot: {fileID: 0}
 --- !u!4 &963363691
 Transform:

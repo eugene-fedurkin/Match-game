@@ -309,7 +309,7 @@ public class Board : MonoBehaviour
         yield return new WaitForSeconds(.5f);
 
         if (isDeadlocked()) {
-            Debug.Log("isDeadlocked");
+            ShuffleBoard();
         }
         currentState = GameState.move;
 
@@ -357,7 +357,7 @@ public class Board : MonoBehaviour
 
     private bool isDeadlocked() {
         for(int i = 0; i < width; i++) {
-            for(int j = 0; j < width; j++) {
+            for(int j = 0; j < height; j++) {
                 if (allDots[i, j] != null) {
                     if (i < width - 1) {
                         if (SwitchAndCheck(i, j , Vector2.right)) {
@@ -375,5 +375,42 @@ public class Board : MonoBehaviour
             }
         }
         return true;
+    }
+
+    private void ShuffleBoard() {
+        List<GameObject> newBoard = new List<GameObject>();
+          for(int i = 0; i < width; i++) {
+            for(int j = 0; j < height; j++) {
+                if (allDots[i, j] != null) {
+                    newBoard.Add(allDots[i, j]);
+                }
+            }
+          }
+
+          for(int i = 0; i < width; i++) {
+            for(int j = 0; j < height; j++) {
+                if (!blankSpaces[i, j]) {
+                    int pieceToUse = Random.Range(0, newBoard.Count);
+                    int maxIteration = 0;
+
+                    while (MatchAt(i, j, newBoard[pieceToUse]) && maxIteration < 100)
+                    {
+                        pieceToUse = Random.Range(0, newBoard.Count);
+                        maxIteration++;
+                    }
+
+                    Dot piece = newBoard[pieceToUse].GetComponent<Dot>();
+                    maxIteration = 0;
+                    piece.col = i;
+                    piece.row = j;
+                    allDots[i, j] = newBoard[pieceToUse];
+                    newBoard.Remove(newBoard[pieceToUse]);
+                }
+            }
+          }
+
+          if (isDeadlocked()) {
+            ShuffleBoard();
+          }
     }
 }
