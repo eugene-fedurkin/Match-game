@@ -18,7 +18,6 @@ public class CameraScalar : MonoBehaviour
     }
 
     void RepositionCamera(float x, float y) {
-        Debug.Log(cameraOffset);
         Vector3 tempPosition = new Vector3(x/2, y/2, cameraOffset);
         transform.position = tempPosition;
         if (board.width >= board.height) {

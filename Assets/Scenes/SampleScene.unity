@@ -231,6 +231,7 @@ GameObject:
   m_Component:
   - component: {fileID: 963363691}
   - component: {fileID: 963363690}
+  - component: {fileID: 963363692}
   m_Layer: 0
   m_Name: Board
   m_TagString: Untagged
@@ -265,8 +266,8 @@ MonoBehaviour:
   breakableTilePrefab: {fileID: 6687387054438216603, guid: 090e6b22066512a4b8366cfd985104d6, type: 3}
   currentState: 1
   offset: 10
-  height: 5
-  width: 5
+  height: 10
+  width: 15
   currentDot: {fileID: 0}
 --- !u!4 &963363691
 Transform:
@@ -283,6 +284,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &963363692
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963363689}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b8ac5718d64e854e908f1caa643c132, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hintDelay: 3
+  hintDelaySeconds: 0
+  hintParticle: {fileID: 3559777876162554278, guid: 4fc7cd82a4d2a7e4b9711003f3497bff, type: 3}
+  currentHint: {fileID: 0}
 --- !u!1 &1313503206
 GameObject:
   m_ObjectHideFlags: 0
