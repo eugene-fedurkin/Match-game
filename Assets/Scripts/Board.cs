@@ -43,6 +43,7 @@ public class Board : MonoBehaviour
     public int streakValue = 1;
     
     private ScoreManager scoreManager;
+    public float refillDelay = 0.5f;
 
 
     // Start is called before the first frame update
@@ -260,20 +261,24 @@ public class Board : MonoBehaviour
             }
         }
 
-        yield return new WaitForSeconds(.4f);
+        yield return new WaitForSeconds(refillDelay * 0.5f);
         StartCoroutine(FillBoardCo());
     }
 
-    void RefillBoard()
-    {
-        for (int i = 0; i < width; i++)
-        {
-            for (int j = 0; j < height; j++)
-            {
-                if (allDots[i, j] == null && !blankSpaces[i, j])
-                {
+    void RefillBoard() {
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                if (allDots[i, j] == null && !blankSpaces[i, j]) {
                     Vector2 tempPosition = new Vector2(i, j + offset);
                     int dotToUse = Random.Range(0, _dots.Length);
+                    int maxIteration = 0;
+
+                    while(MatchAt(i, j, _dots[dotToUse]) && maxIteration < 100) {
+                        maxIteration++;
+                        dotToUse = Random.Range(0, _dots.Length);
+                    }
+                    maxIteration = 0;
+
                     GameObject piece = Instantiate(_dots[dotToUse], tempPosition, Quaternion.identity);
                     allDots[i, j] = piece;
                     piece.GetComponent<Dot>().row = j;
@@ -297,16 +302,16 @@ public class Board : MonoBehaviour
 
     IEnumerator FillBoardCo() {
         RefillBoard();
-        yield return new WaitForSeconds(.5f);
+        yield return new WaitForSeconds(refillDelay);
 
         while(MatchesOnBoard()) {
             streakValue++;
-            yield return new WaitForSeconds(.5f);
+            yield return new WaitForSeconds(2 * refillDelay);
             DestroyMatches();
         }
         _findMatches.currentMatches.Clear();
         currentDot = null;
-        yield return new WaitForSeconds(.5f);
+        yield return new WaitForSeconds(2 * refillDelay);
 
         if (isDeadlocked()) {
             ShuffleBoard();

@@ -150,16 +150,11 @@ private void AddToListAndMatch(GameObject dot) {
 
     }
 
-    public void MatchPiecesOfColor(string color)
-    {
-        for (int i = 0; i < _board.width; i++)
-        {
-            for (int j = 0; j < _board.height; j++)
-            {
-                if (_board.allDots[i, j] != null)
-                {
-                    if (_board.allDots[i, j].tag == color)
-                    {
+    public void MatchPiecesOfColor(string color) {
+        for (int i = 0; i < _board.width; i++) {
+            for (int j = 0; j < _board.height; j++) {
+                if (_board.allDots[i, j] != null) {
+                    if (_board.allDots[i, j].tag == color) {
                         _board.allDots[i, j].GetComponent<Dot>().isMatched = true;
                     }
                 }
@@ -173,8 +168,10 @@ private void AddToListAndMatch(GameObject dot) {
         for (int i = column - 1; i <= column + 1; i++) {
             for (int j = row - 1; j <= row + 1; j++) {
                 if (i >= 0 && i < _board.width && j >= 0 && j <_board.height) {
-                    dots.Add(_board.allDots[i, j]);
-                    _board.allDots[i, j].GetComponent<Dot>().isMatched = true;
+                    if (_board.allDots[i, j] != null) {
+                        dots.Add(_board.allDots[i, j]);
+                        _board.allDots[i, j].GetComponent<Dot>().isMatched = true;
+                    }
                 }
             }
         }
@@ -182,43 +179,43 @@ private void AddToListAndMatch(GameObject dot) {
         return dots;
      }
 
-    List<GameObject> GetColumnPieces(int column)
-    {
+    List<GameObject> GetColumnPieces(int column) {
         List<GameObject> dots = new List<GameObject>();
-        for (int i = 0; i < _board.height; i++)
-        {
-            if (_board.allDots[column, i] != null)
-            {
+        for (int i = 0; i < _board.height; i++) {
+            if (_board.allDots[column, i] != null) {
+                Dot dot = _board.allDots[column, i].GetComponent<Dot>();
+                if (dot.isRowBomb) {
+                    dots.Union(GetRowPieces(i)).ToList();
+                }
+
                 dots.Add(_board.allDots[column, i]);
-                _board.allDots[column, i].GetComponent<Dot>().isMatched = true;
+                dot.isMatched = true;
             }
-                
         }
 
         return dots;
     }
 
-    List<GameObject> GetRowPieces(int row)
-    {
+    List<GameObject> GetRowPieces(int row) {
         List<GameObject> dots = new List<GameObject>();
-        for (int i = 0; i < _board.width; i++)
-        {
-            if (_board.allDots[i, row] != null)
-            {
+        for (int i = 0; i < _board.width; i++) {
+            if (_board.allDots[i, row] != null) {
+                Dot dot = _board.allDots[i, row].GetComponent<Dot>();
+                if (dot.isColumnBomb) {
+                    dots.Union(GetColumnPieces(i)).ToList();
+                }
+
                 dots.Add(_board.allDots[i, row]);
-                _board.allDots[i, row].GetComponent<Dot>().isMatched = true;
+                dot.isMatched = true;
             }
         }
 
         return dots;
     }
 
-    public void CheckBombs()
-    {
-        if (_board.currentDot != null)
-        {
-            if (_board.currentDot.isMatched)
-            {
+    public void CheckBombs() {
+        if (_board.currentDot != null) {
+            if (_board.currentDot.isMatched) {
                 _board.currentDot.isMatched = false;
 
                 /*
@@ -231,30 +228,22 @@ private void AddToListAndMatch(GameObject dot) {
                     _board.currentDot.makeColumnBomb();
                 }*/
                 bool isHorizontalSwipe = (_board.currentDot.swipeAngle > -45 && _board.currentDot.swipeAngle <= 45) || (_board.currentDot.swipeAngle < -135 || _board.currentDot.swipeAngle >= 135);
-                if (isHorizontalSwipe)
-                {
+                if (isHorizontalSwipe) {
                     _board.currentDot.makeRowBomb();
-                } else
-                {
+                } else {
                     _board.currentDot.makeColumnBomb();
                 }
-
-
-            } else if (_board.currentDot.otherDot != null)
-            {
+            } else if (_board.currentDot.otherDot != null) {
                 Dot othetDot = _board.currentDot.otherDot.GetComponent<Dot>();
 
-                if (othetDot.isMatched)
-                {
+                if (othetDot.isMatched) {
                     othetDot.isMatched = false;
 
                     bool isHorizontalSwipe = (_board.currentDot.swipeAngle > -45 && _board.currentDot.swipeAngle <= 45) || (_board.currentDot.swipeAngle < -135 || _board.currentDot.swipeAngle >= 135);
-                    if (isHorizontalSwipe)
-                    {
+                    if (isHorizontalSwipe) {
                         othetDot.makeRowBomb();
                     }
-                    else
-                    {
+                    else {
                         othetDot.makeColumnBomb();
                     }
                 }
