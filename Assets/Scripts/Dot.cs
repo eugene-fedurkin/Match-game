@@ -134,6 +134,7 @@ public class Dot : MonoBehaviour
         {
             board.currentState = GameState.move;
         }
+        Debug.Log(this);
     }
 
     void CalcAngle()

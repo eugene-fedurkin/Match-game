@@ -44,11 +44,13 @@ public class Board : MonoBehaviour
     
     private ScoreManager scoreManager;
     public float refillDelay = 0.5f;
+    private SoundManager soundManager;
 
 
     // Start is called before the first frame update
     void Start()
     {
+        soundManager = FindObjectOfType<SoundManager>();
         scoreManager = FindObjectOfType<ScoreManager>();
         breakableTiles = new BackgroundTile[width, height];
         blankSpaces = new bool[width, height];
@@ -220,6 +222,10 @@ public class Board : MonoBehaviour
                 if (breakableTiles[col, row].hitPoints <= 0) {
                     breakableTiles[col, row] = null;
                 }
+            }
+
+            if (!soundManager != null) {
+                soundManager.PlayDestroyNoise();
             }
 
             Destroy(allDots[col, row]);
