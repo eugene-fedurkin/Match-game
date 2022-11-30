@@ -17,10 +17,12 @@ public class GoalManger : MonoBehaviour {
     public GameObject goalIntroParent;
     public GameObject goalGameParent;
     public List<GoalPanel> currentGoals = new List<GoalPanel>();
+    public EndGameManager endGameManager;
 
     // Start is called before the first frame update
     void Start() {
         SetupIntroGoal();
+        endGameManager = FindObjectOfType<EndGameManager>();
     }
 
     // Update is called once per frame
@@ -35,7 +37,9 @@ public class GoalManger : MonoBehaviour {
         }
 
         if (goalsCompleted >= levelGoal.Length) {
-
+            if (endGameManager != null) {
+                endGameManager.WinGame();
+            }
         }
     }
 

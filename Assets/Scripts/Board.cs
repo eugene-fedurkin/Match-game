@@ -5,7 +5,10 @@ using UnityEngine;
 public enum GameState
 {
     wait,
-    move
+    move,
+    win,
+    lose,
+    pause
 }
 
 public enum TileKind {
@@ -21,8 +24,7 @@ public class TileType {
     public TileKind tileKind;
 }
 
-public class Board : MonoBehaviour
-{
+public class Board : MonoBehaviour {
     [SerializeField] GameObject _tilePrefab;
     [SerializeField] GameObject[] _dots;
     [SerializeField] FindMatches _findMatches;
@@ -49,8 +51,7 @@ public class Board : MonoBehaviour
 
 
     // Start is called before the first frame update
-    void Start()
-    {
+    void Start() {
         goalManger = FindObjectOfType<GoalManger>();
         soundManager = FindObjectOfType<SoundManager>();
         scoreManager = FindObjectOfType<ScoreManager>();
@@ -59,6 +60,8 @@ public class Board : MonoBehaviour
         allDots = new GameObject[width, height];
         _findMatches = FindObjectOfType<FindMatches>();
         SetUp();
+
+        currentState = GameState.pause;
     }
 
     public void GenerateBlankSpaces() {

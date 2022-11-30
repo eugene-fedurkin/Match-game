@@ -16,6 +16,8 @@ public class Dot : MonoBehaviour
     public GameObject otherDot;
     Board board;
 
+
+    EndGameManager endGameManager;
     HintManager hintManager;
     FindMatches _findMatches;
 
@@ -39,8 +41,7 @@ public class Dot : MonoBehaviour
 
 
     // Start is called before the first frame update
-    void Start()
-    {
+    void Start() {
         isColumnBomb = false;
         isRowBomb = false;
         isColorBomb = false;
@@ -50,6 +51,7 @@ public class Dot : MonoBehaviour
         targetX = (int)transform.position.x;
         targetY = (int)transform.position.y;
         _findMatches = FindObjectOfType<FindMatches>();
+         endGameManager = FindObjectOfType<EndGameManager>();
         /*col = targetX;
         row = targetY;
         prevRow = row;
@@ -57,8 +59,7 @@ public class Dot : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
+    void Update() {
         /*if (isMatched)
         {
             SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
@@ -151,7 +152,7 @@ public class Dot : MonoBehaviour
        
     }
 
-    void MovePiecesActual(Vector2 direction){
+    void MovePiecesActual(Vector2 direction) {
         otherDot = board.allDots[col + (int)direction.x, row + (int)direction.y];
         prevRow = row;
         prevCol = col;
@@ -167,8 +168,7 @@ public class Dot : MonoBehaviour
 		}
     }
 
-    void MovePieces()
-    {
+    void MovePieces() {
         if (swipeAngle > -45 && swipeAngle <= 45 && col < board.width - 1)
         {
             MovePiecesActual(Vector2.right);
@@ -188,24 +188,19 @@ public class Dot : MonoBehaviour
         board.currentState = GameState.move;
     }
 
-    IEnumerator CheckMoveCo()
-    {
-        if (isColorBomb)
-        {
+    IEnumerator CheckMoveCo() {
+        if (isColorBomb) {
             _findMatches.MatchPiecesOfColor(otherDot.tag);
             isMatched = true;
-        } else if (otherDot.GetComponent<Dot>().isColorBomb)
-        {
+        } else if (otherDot.GetComponent<Dot>().isColorBomb) {
             _findMatches.MatchPiecesOfColor(gameObject.tag);
             otherDot.GetComponent<Dot>().isMatched = true;
         }
 
         yield return new WaitForSeconds(.5f);
 
-        if (otherDot != null)
-        {
-            if (!isMatched && !otherDot.GetComponent<Dot>().isMatched)
-            {
+        if (otherDot != null) {
+            if (!isMatched && !otherDot.GetComponent<Dot>().isMatched) {
                 otherDot.GetComponent<Dot>().row = row;
                 otherDot.GetComponent<Dot>().col = col;
                 row = prevRow;
@@ -213,8 +208,13 @@ public class Dot : MonoBehaviour
                 yield return new WaitForSeconds(.5f);
                 board.currentDot = null;
                 board.currentState = GameState.move;
-            } else
-            {
+            } else {
+                if (endGameManager != null) {
+                    if (endGameManager.requirements.gameType == GameType.Moves) {
+                        endGameManager.DecreaseCounter();
+                    }
+                }
+
                 board.DestroyMatches();
             }
 
@@ -222,8 +222,7 @@ public class Dot : MonoBehaviour
         }
     }
 
-    public void makeRowBomb()
-    {
+    public void makeRowBomb() {
         isRowBomb = true;
         GameObject arrow = Instantiate(rowArrow, transform.position, Quaternion.identity);
         arrow.transform.parent = this.transform;
