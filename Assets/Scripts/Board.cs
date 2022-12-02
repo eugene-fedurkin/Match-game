@@ -48,7 +48,25 @@ public class Board : MonoBehaviour {
     public float refillDelay = 0.5f;
     private SoundManager soundManager;
     private GoalManger goalManger;
+    
+    public World world;
+    public int level;
 
+    void Awake() {
+        if (PlayerPrefs.HasKey("Current Level")) {
+            level = PlayerPrefs.GetInt("Current Level");
+        }
+
+        if (world != null) {
+            if (world.levels[level] != null) {
+                width = world.levels[level].width;
+                height = world.levels[level].height;
+                _dots = world.levels[level].dots;
+                // scoreG = world.levels[level].scoreGoals;
+                boardLayout = world.levels[level].boardLayout;
+            }
+        }
+    }
 
     // Start is called before the first frame update
     void Start() {

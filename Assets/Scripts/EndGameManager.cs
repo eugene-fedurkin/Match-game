@@ -28,8 +28,9 @@ public class EndGameManager : MonoBehaviour {
     Board board;
 
     void Start() {
-        SetupGame();
         board = FindObjectOfType<Board>();
+        SetGameType();
+        SetupGame();
     }
 
     void Update() {
@@ -38,6 +39,14 @@ public class EndGameManager : MonoBehaviour {
             if (timesSeconds <= 0) {
                 DecreaseCounter();
                 timesSeconds = 1;
+            }
+        }
+    }
+
+    void SetGameType() {
+        if (board.world != null) {
+            if (board.world.levels[board.level] != null) {
+                requirements = board.world.levels[board.level].endGameRequirements;
             }
         }
     }
