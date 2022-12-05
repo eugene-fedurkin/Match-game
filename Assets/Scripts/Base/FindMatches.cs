@@ -84,28 +84,23 @@ private void AddToListAndMatch(GameObject dot) {
         AddToListAndMatch(dot3);
     }
 
-    private IEnumerator FindAllMatchesCo()
-    {
-        yield return new WaitForSeconds(.2f);
+    private IEnumerator FindAllMatchesCo() {
+        // yield return new WaitForSeconds(.2f);
+        yield return null; // wait to next frame
         for(int i = 0; i < _board.width; i++) {
-            for (int j = 0; j < _board.height; j++)
-            {
+            for (int j = 0; j < _board.height; j++) {
                 GameObject currentDot = _board.allDots[i, j];
-                if (currentDot != null)
-                {
+                if (currentDot != null) {
                     Dot currentDotDot = currentDot.GetComponent<Dot>();
-                    if (i > 0 && i < _board.width - 1)
-                    {
+                    if (i > 0 && i < _board.width - 1) {
                         GameObject leftDot = _board.allDots[i - 1, j];
                         GameObject rightDot = _board.allDots[i + 1, j];
 
-                        if (leftDot != null && rightDot != null)
-                        {
+                        if (leftDot != null && rightDot != null) {
                             Dot leftDotDot = leftDot.GetComponent<Dot>();
                             Dot rightDotDot = rightDot.GetComponent<Dot>();
 
-                            if (leftDot.tag == currentDot.tag && rightDot.tag == currentDot.tag)
-                            {
+                            if (leftDot.tag == currentDot.tag && rightDot.tag == currentDot.tag) {
                                 currentMatches.Union(isRowBomb(leftDotDot, currentDotDot, rightDotDot));
                                 currentMatches.Union(isColBomb(leftDotDot, currentDotDot, rightDotDot));
                                 currentMatches.Union(isAdjacentBomb(leftDotDot, currentDotDot, rightDotDot));
@@ -115,18 +110,15 @@ private void AddToListAndMatch(GameObject dot) {
                         }
                     }
 
-                    if (j > 0 && j < _board.height - 1)
-                    {
+                    if (j > 0 && j < _board.height - 1) {
                         GameObject upDot = _board.allDots[i, j + 1];
                         GameObject downDot = _board.allDots[i, j - 1];
 
-                        if (upDot != null && downDot != null)
-                        {
+                        if (upDot != null && downDot != null) {
                             Dot upDotDot = upDot.GetComponent<Dot>();
                             Dot downDotDot = downDot.GetComponent<Dot>();
 
-                            if (upDot.tag == currentDot.tag && downDot.tag == currentDot.tag)
-                            {
+                            if (upDot.tag == currentDot.tag && downDot.tag == currentDot.tag) {
                                 currentMatches.Union(isColBomb(upDotDot, currentDotDot, downDotDot));
                                 currentMatches.Union(isRowBomb(upDotDot, currentDotDot, downDotDot));
                                 currentMatches.Union(isAdjacentBomb(upDotDot, currentDotDot, downDotDot));
@@ -203,9 +195,9 @@ private void AddToListAndMatch(GameObject dot) {
         return dots;
     }
 
-    public void CheckBombs() {
+    public void CheckBombs(MatchType matchType) {
         if (_board.currentDot != null) {
-            if (_board.currentDot.isMatched) {
+            if (_board.currentDot.isMatched && _board.currentDot.tag == matchType.color) {
                 _board.currentDot.isMatched = false;
 
                 /*
@@ -226,14 +218,13 @@ private void AddToListAndMatch(GameObject dot) {
             } else if (_board.currentDot.otherDot != null) {
                 Dot othetDot = _board.currentDot.otherDot.GetComponent<Dot>();
 
-                if (othetDot.isMatched) {
+                if (othetDot.isMatched && _board.currentDot.tag == matchType.color) {
                     othetDot.isMatched = false;
 
                     bool isHorizontalSwipe = (_board.currentDot.swipeAngle > -45 && _board.currentDot.swipeAngle <= 45) || (_board.currentDot.swipeAngle < -135 || _board.currentDot.swipeAngle >= 135);
                     if (isHorizontalSwipe) {
                         othetDot.makeRowBomb();
-                    }
-                    else {
+                    } else {
                         othetDot.makeColumnBomb();
                     }
                 }
