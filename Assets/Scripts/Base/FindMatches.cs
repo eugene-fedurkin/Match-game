@@ -20,18 +20,15 @@ public class FindMatches : MonoBehaviour
 
     private List<GameObject> isAdjacentBomb(Dot dot1, Dot dot2, Dot dot3) {
         List<GameObject> currentDots = new List<GameObject>();
-        if (dot1.isAdjacentBomb)
-        {
+        if (dot1.isAdjacentBomb) {
             currentMatches.Union(GetAdjacentPieces(dot1.col, dot1.row));
         }
 
-        if (dot2.isAdjacentBomb)
-        {
+        if (dot2.isAdjacentBomb) {
             currentMatches.Union(GetAdjacentPieces(dot2.col, dot2.row));
         }
 
-        if (dot3.isAdjacentBomb)
-        {
+        if (dot3.isAdjacentBomb) {
             currentMatches.Union(GetAdjacentPieces(dot3.col, dot3.row));
         }
 
@@ -41,18 +38,15 @@ public class FindMatches : MonoBehaviour
 
     private List<GameObject> isRowBomb(Dot dot1, Dot dot2, Dot dot3) {
         List<GameObject> currentDots = new List<GameObject>();
-        if (dot1.isRowBomb)
-        {
+        if (dot1.isRowBomb) {
             currentMatches.Union(GetRowPieces(dot1.row));
         }
 
-        if (dot2.isRowBomb)
-        {
+        if (dot2.isRowBomb) {
             currentMatches.Union(GetRowPieces(dot2.row));
         }
 
-        if (dot3.isRowBomb)
-        {
+        if (dot3.isRowBomb) {
             currentMatches.Union(GetRowPieces(dot3.row));
         }
 
@@ -61,18 +55,15 @@ public class FindMatches : MonoBehaviour
 
     private List<GameObject> isColBomb(Dot dot1, Dot dot2, Dot dot3) {
         List<GameObject> currentDots = new List<GameObject>();
-        if (dot1.isColumnBomb)
-        {
+        if (dot1.isColumnBomb) {
             currentMatches.Union(GetColumnPieces(dot1.col));
         }
 
-        if (dot2.isColumnBomb)
-        {
+        if (dot2.isColumnBomb) {
             currentMatches.Union(GetColumnPieces(dot2.col));
         }
 
-        if (dot3.isColumnBomb)
-        {
+        if (dot3.isColumnBomb) {
             currentMatches.Union(GetColumnPieces(dot3.col));
         }
 
@@ -96,8 +87,7 @@ private void AddToListAndMatch(GameObject dot) {
     private IEnumerator FindAllMatchesCo()
     {
         yield return new WaitForSeconds(.2f);
-        for(int i = 0; i < _board.width; i++)
-        {
+        for(int i = 0; i < _board.width; i++) {
             for (int j = 0; j < _board.height; j++)
             {
                 GameObject currentDot = _board.allDots[i, j];

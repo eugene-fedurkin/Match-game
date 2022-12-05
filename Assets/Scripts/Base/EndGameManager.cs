@@ -26,8 +26,10 @@ public class EndGameManager : MonoBehaviour {
     
     float timesSeconds;
     Board board;
+    GameData gameData;
 
     void Start() {
+        gameData = FindObjectOfType<GameData>();
         board = FindObjectOfType<Board>();
         SetGameType();
         SetupGame();
@@ -66,6 +68,9 @@ public class EndGameManager : MonoBehaviour {
     }
 
     public void WinGame() {
+        gameData = FindObjectOfType<GameData>();
+        gameData.saveData.level += 1;
+
         youWinPanel.SetActive(true);
         board.currentState = GameState.win;
         currentCounterValue = 0;

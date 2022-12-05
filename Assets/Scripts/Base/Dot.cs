@@ -223,30 +223,35 @@ public class Dot : MonoBehaviour
     }
 
     public void makeRowBomb() {
-        isRowBomb = true;
-        GameObject arrow = Instantiate(rowArrow, transform.position, Quaternion.identity);
-        arrow.transform.parent = this.transform;
+        if (!isColumnBomb && !isColorBomb && !isAdjacentBomb) {
+            isRowBomb = true;
+            GameObject arrow = Instantiate(rowArrow, transform.position, Quaternion.identity);
+            arrow.transform.parent = this.transform;
+        }
     }
 
-    public void makeColumnBomb()
-    {
-        isColumnBomb = true;
-        GameObject arrow = Instantiate(columnArrow, transform.position, Quaternion.identity);
-        arrow.transform.parent = this.transform;
+    public void makeColumnBomb() {
+        if (!isRowBomb && !isColorBomb && !isAdjacentBomb) {
+            isColumnBomb = true;
+            GameObject arrow = Instantiate(columnArrow, transform.position, Quaternion.identity);
+            arrow.transform.parent = this.transform;
+        }
     }
 
-    public void makeColorBomb()
-    {
-        isColorBomb = true;
-        GameObject color = Instantiate(colorBomb, transform.position, Quaternion.identity);
-        color.transform.parent = this.transform;
-        gameObject.tag = "Color";
+    public void makeColorBomb() {
+        if (!isRowBomb && !isColumnBomb && !isAdjacentBomb) {
+            isColorBomb = true;
+            GameObject color = Instantiate(colorBomb, transform.position, Quaternion.identity);
+            color.transform.parent = this.transform;
+            gameObject.tag = "Color";
+        }
     }
 
-    public void makeAdjacentBomb()
-    {
-        isAdjacentBomb = true;
-        GameObject marker = Instantiate(adjacentBomb, transform.position, Quaternion.identity);
-        marker.transform.parent = this.transform;
+    public void makeAdjacentBomb() {
+        if (!isRowBomb && !isColumnBomb && !isColorBomb) {
+            isAdjacentBomb = true;
+            GameObject marker = Instantiate(adjacentBomb, transform.position, Quaternion.identity);
+            marker.transform.parent = this.transform;
+        }
     }
 }
