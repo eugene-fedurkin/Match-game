@@ -14,6 +14,9 @@ public enum GameState
 public enum TileKind {
     Breakable,
     Blank,
+    Lock,
+    Concrete,
+    Slime,
     Normal,
 }
 
@@ -42,6 +45,8 @@ public class Board : MonoBehaviour {
     public TileType[] boardLayout;
     public BackgroundTile[,] breakableTiles;
     public GameObject breakableTilePrefab;
+    public GameObject lockTilePrefab;
+    public BackgroundTile[,] lockTiles;
 
     public GameState currentState = GameState.move;
 
@@ -84,6 +89,7 @@ public class Board : MonoBehaviour {
         soundManager = FindObjectOfType<SoundManager>();
         scoreManager = FindObjectOfType<ScoreManager>();
         breakableTiles = new BackgroundTile[width, height];
+        lockTiles = new BackgroundTile[width, height];
         blankSpaces = new bool[width, height];
         allDots = new GameObject[width, height];
         _findMatches = FindObjectOfType<FindMatches>();
@@ -101,19 +107,30 @@ public class Board : MonoBehaviour {
     }
 
     public void GenerateBreakbaleTiles() {
-         for (int i = 0; i < boardLayout.Length; i++) {
+        for (int i = 0; i < boardLayout.Length; i++) {
             if (boardLayout[i].tileKind == TileKind.Breakable) {
                 Vector2 tempPosition = new Vector2(boardLayout[i].x, boardLayout[i].y);
                 GameObject tile = Instantiate(breakableTilePrefab, tempPosition, Quaternion.identity);
                 breakableTiles[boardLayout[i].x, boardLayout[i].y] = tile.GetComponent<BackgroundTile>();
             }
-         }
+        }
+    }
+
+    private void GenerateLockTiles() {
+        for (int i = 0; i < boardLayout.Length; i++) {
+            if (boardLayout[i].tileKind == TileKind.Lock) {
+                Vector2 tempPosition = new Vector2(boardLayout[i].x, boardLayout[i].y);
+                GameObject tile = Instantiate(lockTilePrefab, tempPosition, Quaternion.identity);
+                lockTiles[boardLayout[i].x, boardLayout[i].y] = tile.GetComponent<BackgroundTile>();
+            }
+        }
     }
 
     // Update is called once per frame
     void SetUp() {
         GenerateBlankSpaces();
         GenerateBreakbaleTiles();
+        GenerateLockTiles();
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 if (!blankSpaces[i, j]) {
@@ -347,6 +364,13 @@ public class Board : MonoBehaviour {
                 }
             }
 
+            if (lockTiles[col, row] != null) {
+                lockTiles[col, row].TakeDamage(1);
+                if (lockTiles[col, row].hitPoints <= 0) {
+                    lockTiles[col, row] = null;
+                }
+            }
+
             if (goalManger != null) {
                 goalManger.CompareGoal(allDots[col, row].tag.ToString());
                 goalManger.UpdateGoals();
@@ -357,7 +381,7 @@ public class Board : MonoBehaviour {
             }
 
             Destroy(allDots[col, row]);
-            Debug.Log(basePieceValue * streakValue);
+            Debug.Log("col " + col + " row " + row);
             scoreManager.IncreaseScore(basePieceValue * streakValue);
             allDots[col, row] = null;
         }

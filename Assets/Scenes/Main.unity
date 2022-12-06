@@ -2176,7 +2176,11 @@ MonoBehaviour:
     y: 0
     tileKind: 0
   breakableTilePrefab: {fileID: 6687387054438216603, guid: 090e6b22066512a4b8366cfd985104d6, type: 3}
+  lockTilePrefab: {fileID: 6475482564335016499, guid: ee2584f64990cb94eac903b44766ca79, type: 3}
   currentState: 1
+  matchType:
+    type: 0
+    color: 
   offset: 10
   height: 10
   width: 7

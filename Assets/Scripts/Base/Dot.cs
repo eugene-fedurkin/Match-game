@@ -21,8 +21,8 @@ public class Dot : MonoBehaviour
     HintManager hintManager;
     FindMatches _findMatches;
 
-    Vector2 firstTouchPosition;
-    Vector2 finalTouchPosition;
+    Vector2 firstTouchPosition = Vector2.zero;
+    Vector2 finalTouchPosition = Vector2.zero;
     Vector2 _tempPosition;
 
     [Header("Swipe Stuff")]
@@ -141,12 +141,17 @@ public class Dot : MonoBehaviour
         otherDot = board.allDots[col + (int)direction.x, row + (int)direction.y];
         prevRow = row;
         prevCol = col;
-        if (otherDot != null) {
-            otherDot.GetComponent<Dot>().col += -1 * (int)direction.x;
-            otherDot.GetComponent<Dot>().row += -1 * (int)direction.y;
-            col += (int)direction.x;
-            row += (int)direction.y;
-            StartCoroutine(CheckMoveCo());
+
+        if (board.lockTiles[col, row] == null && board.lockTiles[col + (int)direction.x, row + (int)direction.y] == null) {
+            if (otherDot != null) {
+                otherDot.GetComponent<Dot>().col += -1 * (int)direction.x;
+                otherDot.GetComponent<Dot>().row += -1 * (int)direction.y;
+                col += (int)direction.x;
+                row += (int)direction.y;
+                StartCoroutine(CheckMoveCo());
+            } else {
+                board.currentState = GameState.move;
+            }
         } else {
             board.currentState = GameState.move;
         }
