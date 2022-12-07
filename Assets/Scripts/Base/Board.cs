@@ -45,6 +45,8 @@ public class Board : MonoBehaviour {
     public TileType[] boardLayout;
     public BackgroundTile[,] breakableTiles;
     public GameObject breakableTilePrefab;
+    public GameObject concreteTilePrefab;
+    public BackgroundTile[,] concreteTiles;
     public GameObject lockTilePrefab;
     public BackgroundTile[,] lockTiles;
 
@@ -90,6 +92,7 @@ public class Board : MonoBehaviour {
         scoreManager = FindObjectOfType<ScoreManager>();
         breakableTiles = new BackgroundTile[width, height];
         lockTiles = new BackgroundTile[width, height];
+        concreteTiles = new BackgroundTile[width, height];
         blankSpaces = new bool[width, height];
         allDots = new GameObject[width, height];
         _findMatches = FindObjectOfType<FindMatches>();
@@ -126,14 +129,25 @@ public class Board : MonoBehaviour {
         }
     }
 
+    public void GenerateConcreteTiles() {
+        for (int i = 0; i < boardLayout.Length; i++) {
+            if (boardLayout[i].tileKind == TileKind.Concrete) {
+                Vector2 tempPosition = new Vector2(boardLayout[i].x, boardLayout[i].y);
+                GameObject tile = Instantiate(concreteTilePrefab, tempPosition, Quaternion.identity);
+                concreteTiles[boardLayout[i].x, boardLayout[i].y] = tile.GetComponent<BackgroundTile>();
+            }
+        }
+    }
+
     // Update is called once per frame
     void SetUp() {
         GenerateBlankSpaces();
         GenerateBreakbaleTiles();
         GenerateLockTiles();
+        GenerateConcreteTiles();
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
-                if (!blankSpaces[i, j]) {
+                if (!blankSpaces[i, j] && !concreteTiles[i, j]) {
                     Vector2 tempPosition = new Vector2(i, j + offset);
                     Vector2 tilePosition = new Vector2(i, j);
                     GameObject backgroundTile = Instantiate(_tilePrefab, tilePosition, Quaternion.identity);
@@ -156,7 +170,7 @@ public class Board : MonoBehaviour {
                     dot.name = "(" + i + ", " + j + ")";
                     allDots[i, j] = dot;
                 }
-                }
+            }
         }
     }
 
@@ -371,6 +385,8 @@ public class Board : MonoBehaviour {
                 }
             }
 
+            DamageConcrete(col, row);
+
             if (goalManger != null) {
                 goalManger.CompareGoal(allDots[col, row].tag.ToString());
                 goalManger.UpdateGoals();
@@ -402,6 +418,44 @@ public class Board : MonoBehaviour {
         }
 
         StartCoroutine(DecreaseRowCo2());
+    }
+
+    void DamageConcrete(int col, int row) {
+        if (col > 0) {
+            if (concreteTiles[col - 1, row]) {
+                concreteTiles[col - 1, row].TakeDamage(1);
+                if (concreteTiles[col - 1, row].hitPoints <= 0) {
+                    concreteTiles[col - 1, row] = null;
+                }
+            }
+        }
+
+        if (col < width - 1) {
+            if (concreteTiles[col + 1, row]) {
+                concreteTiles[col + 1, row].TakeDamage(1);
+                if (concreteTiles[col + 1, row].hitPoints <= 0) {
+                    concreteTiles[col + 1, row] = null;
+                }
+            }
+        }
+
+        if (row < 0) {
+            if (concreteTiles[col, row - 1]) {
+                concreteTiles[col, row - 1].TakeDamage(1);
+                if (concreteTiles[col, row - 1].hitPoints <= 0) {
+                    concreteTiles[col, row - 1] = null;
+                }
+            }
+        }
+
+        if (row < height - 1) {
+            if (concreteTiles[col, row + 1]) {
+                concreteTiles[col, row + 1].TakeDamage(1);
+                if (concreteTiles[col, row + 1].hitPoints <= 0) {
+                    concreteTiles[col, row + 1] = null;
+                }
+            }
+        }
     }
 
     IEnumerator DecreaseRowCo2() {
@@ -492,18 +546,46 @@ public class Board : MonoBehaviour {
             for (int j = 0; j < width; j++) {
                 if (allDots[i, j] != null) {
 
+                    if (i < width - 2) {
+                        //Check if the dots to the right and two to the right exist
+                        if (allDots[i + 1, j] != null && allDots[i + 2, j] != null)
+                        {
+                            if (allDots[i + 1, j].tag == allDots[i, j].tag
+                               && allDots[i + 2, j].tag == allDots[i, j].tag)
+                            {
+                                return true;
+                            }
+                        }
 
-                    if (i < width - 2 && allDots[i + 1, j] != null && allDots[i + 2, j] != null) {
-                        if (allDots[i + 1, j].tag == allDots[i, j].tag && allDots[i + 2, j].tag == allDots[i, j].tag) {
-                            return true;
+                    }
+                    if (j < height - 2) {
+                        //Check if the dots above exist
+                        if (allDots[i, j + 1] != null && allDots[i, j + 2] != null)
+                        {
+                            if (allDots[i, j + 1].tag == allDots[i, j].tag
+                               && allDots[i, j + 2].tag == allDots[i, j].tag)
+                            {
+                                return true;
+                            }
                         }
                     }
 
-                    if (j < height - 2 && allDots[i, j + 1] != null && allDots[i, j + 1] != null) {
-                        if (allDots[i, j + 1].tag == allDots[i, j].tag && allDots[i, j + 2].tag == allDots[i, j].tag) {
-                            return true;
-                        }
-                    }
+                    // if (i < width - 2) {
+                    //     if (i < width - 2 && allDots[i + 1, j] != null && allDots[i + 2, j] != null) {
+                    //         if (allDots[i + 1, j].tag == allDots[i, j].tag && allDots[i + 2, j].tag == allDots[i, j].tag) {
+                    //             return true;
+                    //         }
+                    //     }
+                    // }
+                    
+
+                    // if (i < height - 2) {
+                    //     if (j < height - 2 && allDots[i, j + 1] != null && allDots[i, j + 1] != null) {
+                    //         if (allDots[i, j + 1].tag == allDots[i, j].tag && allDots[i, j + 2].tag == allDots[i, j].tag) {
+                    //             return true;
+                    //         }
+                    //     }
+                    // }
                 }
             }
         }
