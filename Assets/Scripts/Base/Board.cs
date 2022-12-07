@@ -461,7 +461,7 @@ public class Board : MonoBehaviour {
     IEnumerator DecreaseRowCo2() {
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
-                if (!blankSpaces[i, j] && allDots[i, j] == null) {
+                if (!blankSpaces[i, j] && allDots[i, j] == null && !concreteTiles[i, j]) {
                     for (int k = j + 1; k < height; k++) {
                         if (allDots[i, k] != null) {
                             allDots[i, k].GetComponent<Dot>().row = j;
@@ -480,7 +480,7 @@ public class Board : MonoBehaviour {
     void RefillBoard() {
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
-                if (allDots[i, j] == null && !blankSpaces[i, j]) {
+                if (allDots[i, j] == null && !blankSpaces[i, j] && !concreteTiles[i,j]) {
                     Vector2 tempPosition = new Vector2(i, j + offset);
                     int dotToUse = Random.Range(0, _dots.Length);
                     int maxIteration = 0;
