@@ -8,6 +8,12 @@ public class SoundManager : MonoBehaviour
     // Start is called before the first frame update
     
     public void PlayDestroyNoise() {
-        destroyNoise.Play();
+        if (PlayerPrefs.HasKey("Sound")) {
+            if (PlayerPrefs.GetInt("Sound") == 1) {
+                destroyNoise.Play();
+            }
+        } else {
+            destroyNoise.Play();
+        }
     }
 }

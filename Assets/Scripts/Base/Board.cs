@@ -502,7 +502,9 @@ public class Board : MonoBehaviour {
         if (isDeadlocked()) {
             ShuffleBoard();
         }
-        currentState = GameState.move;
+        if (currentState != GameState.pause) {
+            currentState = GameState.move;
+        }
         streakValue = 1;
     }
 
