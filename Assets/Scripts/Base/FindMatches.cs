@@ -40,14 +40,17 @@ public class FindMatches : MonoBehaviour
         List<GameObject> currentDots = new List<GameObject>();
         if (dot1.isRowBomb) {
             currentMatches.Union(GetRowPieces(dot1.row));
+            _board.BombRow(dot1.row);
         }
 
         if (dot2.isRowBomb) {
             currentMatches.Union(GetRowPieces(dot2.row));
+            _board.BombRow(dot2.row);
         }
 
         if (dot3.isRowBomb) {
             currentMatches.Union(GetRowPieces(dot3.row));
+            _board.BombRow(dot3.row);
         }
 
         return currentDots;
@@ -57,14 +60,20 @@ public class FindMatches : MonoBehaviour
         List<GameObject> currentDots = new List<GameObject>();
         if (dot1.isColumnBomb) {
             currentMatches.Union(GetColumnPieces(dot1.col));
+            _board.BombRow(dot1.col);
+
         }
 
         if (dot2.isColumnBomb) {
             currentMatches.Union(GetColumnPieces(dot2.col));
+            _board.BombRow(dot2.col);
+
         }
 
         if (dot3.isColumnBomb) {
             currentMatches.Union(GetColumnPieces(dot3.col));
+            _board.BombRow(dot3.col);
+
         }
 
         return currentDots;

@@ -316,57 +316,32 @@ public class Board : MonoBehaviour {
                 _findMatches.CheckBombs(typeofMatch);
             }
         }
+    }
 
+    public void BombRow(int row) {
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                if (concreteTiles[i, j]) {
+                    concreteTiles[i, row].TakeDamage(1);
+                    if (concreteTiles[i, row].hitPoints <= 0) {
+                        concreteTiles[i, row] = null;
+                    }
+                }
+            }
+        }
+    }
 
-
-
-        // if (_findMatches.currentMatches.Count == 4 || _findMatches.currentMatches.Count == 7) {
-        //     _findMatches.CheckBombs();
-        // }
-
-        // if (_findMatches.currentMatches.Count == 5 || _findMatches.currentMatches.Count == 8) {
-        //     if (ColumnOrRow()) {
-        //         // make color bomb
-        //         if (currentDot != null) {
-        //             if (currentDot.isMatched) {
-        //                 if (!currentDot.isColorBomb) {
-        //                     currentDot.isMatched = false;
-        //                     currentDot.makeColorBomb();
-        //                 }
-        //             } else {
-        //                 if (currentDot.otherDot != null) {
-        //                     Dot otherDot = currentDot.otherDot.GetComponent<Dot>();
-        //                     if (otherDot.isMatched) {
-        //                         if (!otherDot.isColorBomb) {
-        //                             otherDot.isMatched = false;
-        //                             otherDot.makeColorBomb();
-        //                         }
-        //                     }
-        //                 }
-        //             }
-        //         }
-        //     } else {
-        //         // make adjacent bomb
-        //         if (currentDot != null) {
-        //             if (currentDot.isMatched) {
-        //                 if (!currentDot.isAdjacentBomb) {
-        //                     currentDot.isMatched = false;
-        //                     currentDot.makeAdjacentBomb();
-        //                 }
-        //             } else {
-        //                 if (currentDot.otherDot != null) {
-        //                     Dot otherDot = currentDot.otherDot.GetComponent<Dot>();
-        //                     if (otherDot.isMatched) {
-        //                         if (!otherDot.isAdjacentBomb) {
-        //                             otherDot.isMatched = false;
-        //                             otherDot.makeAdjacentBomb();
-        //                         }
-        //                     }
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
+    public void BombCol(int col) {
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                if (concreteTiles[i, j]) {
+                    concreteTiles[col, i].TakeDamage(1);
+                    if (concreteTiles[col, i].hitPoints <= 0) {
+                        concreteTiles[col, i] = null;
+                    }
+                }
+            }
+        }
     }
 
     void DestroyMatchesAt(int col, int row) {
@@ -536,9 +511,11 @@ public class Board : MonoBehaviour {
     }
 
     private void SwitchPieces(int column, int row, Vector2 direction) {
-        GameObject holder = allDots[column + (int)direction.x, row + (int)direction.y];
-        allDots[column + (int)direction.x, row + (int)direction.y] = allDots[column, row];
-        allDots[column, row] = holder;
+        if (allDots[column + (int)direction.x, row + (int)direction.y] != null) {
+            GameObject holder = allDots[column + (int)direction.x, row + (int)direction.y];
+            allDots[column + (int)direction.x, row + (int)direction.y] = allDots[column, row];
+            allDots[column, row] = holder;
+        }
     }
 
     private bool CheckForMatches() {
@@ -627,22 +604,21 @@ public class Board : MonoBehaviour {
 
     private void ShuffleBoard() {
         List<GameObject> newBoard = new List<GameObject>();
-          for(int i = 0; i < width; i++) {
+        for(int i = 0; i < width; i++) {
             for(int j = 0; j < height; j++) {
                 if (allDots[i, j] != null) {
                     newBoard.Add(allDots[i, j]);
                 }
             }
-          }
+        }
 
           for(int i = 0; i < width; i++) {
             for(int j = 0; j < height; j++) {
-                if (!blankSpaces[i, j]) {
+                if (!blankSpaces[i, j] && !concreteTiles[i, j]) {
                     int pieceToUse = Random.Range(0, newBoard.Count);
                     int maxIteration = 0;
 
-                    while (MatchAt(i, j, newBoard[pieceToUse]) && maxIteration < 100)
-                    {
+                    while (MatchAt(i, j, newBoard[pieceToUse]) && maxIteration < 100) {
                         pieceToUse = Random.Range(0, newBoard.Count);
                         maxIteration++;
                     }
