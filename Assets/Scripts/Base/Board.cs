@@ -320,12 +320,10 @@ public class Board : MonoBehaviour {
 
     public void BombRow(int row) {
         for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                if (concreteTiles[i, j]) {
-                    concreteTiles[i, row].TakeDamage(1);
-                    if (concreteTiles[i, row].hitPoints <= 0) {
-                        concreteTiles[i, row] = null;
-                    }
+            if (concreteTiles[i, row]) {
+                concreteTiles[i, row].TakeDamage(1);
+                if (concreteTiles[i, row].hitPoints <= 0) {
+                    concreteTiles[i, row] = null;
                 }
             }
         }
@@ -333,12 +331,10 @@ public class Board : MonoBehaviour {
 
     public void BombCol(int col) {
         for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                if (concreteTiles[i, j]) {
-                    concreteTiles[col, i].TakeDamage(1);
-                    if (concreteTiles[col, i].hitPoints <= 0) {
-                        concreteTiles[col, i] = null;
-                    }
+            if (concreteTiles[col, i]) {
+                concreteTiles[col, i].TakeDamage(1);
+                if (concreteTiles[col, i].hitPoints <= 0) {
+                    concreteTiles[col, i] = null;
                 }
             }
         }
